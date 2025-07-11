@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             btnClients = new Button();
+            btnSubscriptions = new Button();
             SuspendLayout();
             // 
             // btnClients
@@ -41,11 +42,22 @@
             btnClients.UseVisualStyleBackColor = true;
             btnClients.Click += btnClients_Click;
             // 
+            // btnSubscriptions
+            // 
+            btnSubscriptions.Location = new Point(181, 188);
+            btnSubscriptions.Name = "btnSubscriptions";
+            btnSubscriptions.Size = new Size(113, 60);
+            btnSubscriptions.TabIndex = 1;
+            btnSubscriptions.Text = "Manage Subscriptions";
+            btnSubscriptions.UseVisualStyleBackColor = true;
+            btnSubscriptions.Click += BtnSubscriptions_Click;
+            // 
             // MainMenuForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnSubscriptions);
             Controls.Add(btnClients);
             Name = "MainMenuForm";
             Text = "MainMenuForm";
@@ -55,5 +67,6 @@
         #endregion
 
         private Button btnClients;
+        private Button btnSubscriptions;
     }
 }

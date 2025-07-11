@@ -2,6 +2,7 @@
 using DogWalkerApp.Infrastructure.Data;
 using DogWalkerApp.Infrastructure.Data;
 using DogWalkerApp.Infrastructure.Services;
+using DogWalkerApp.WinForms.Forms;
 using DogWalkerApp.WinForms.Presenters;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -28,9 +29,19 @@ namespace DogWalkerApp.WinForms
 
         private void btnClients_Click(object sender, EventArgs e)
         {
-            var form = new ClientForm();
-            var service = new ClientService(_context);
-            var presenter = new ClientPresenter(form, service);
+            var form = new ClientForm(_context);
+            new ClientPresenter(form, new ClientService(_context));
+            form.ShowDialog();
+        }
+
+        private void BtnSubscriptions_Click(object sender, EventArgs e)
+        {
+            var form = new SubscriptionForm();
+            new SubscriptionPresenter(
+                form,
+                new SubscriptionService(_context),
+                new ClientService(_context)
+            );
             form.ShowDialog();
         }
 

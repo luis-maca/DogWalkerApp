@@ -1,5 +1,11 @@
 ﻿using DogWalkerApp.Application.DTOs;
+using DogWalkerApp.Application.Interfaces;
+using DogWalkerApp.Infrastructure.Data;
+using DogWalkerApp.Infrastructure.Services;
+using DogWalkerApp.WinForms.Forms;
+using DogWalkerApp.WinForms.Presenters;
 using DogWalkerApp.WinForms.Views;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -8,6 +14,8 @@ namespace DogWalkerApp.WinForms
 {
     public partial class ClientForm : Form, IClientView
     {
+        private readonly DogWalkerDbContext _context;
+        private readonly IClientService _service;
 
         public string ClientName => txtName.Text.Trim();
         public string PhoneNumber => txtPhone.Text.Trim();
@@ -17,9 +25,10 @@ namespace DogWalkerApp.WinForms
         public bool SearchAllChecked => chkSearchAll.Checked;
 
         public int SelectedClientId =>
-            dgvClients.SelectedRows.Count > 0
-                ? Convert.ToInt32(dgvClients.SelectedRows[0].Cells["Id"].Value)
-                : -1;
+                   dgvClients.SelectedRows.Count > 0
+        ? Convert.ToInt32(dgvClients.SelectedRows[0].Cells["Id"].Value)
+        : -1;
+
 
         //Events for button clicks and selection changes
         public event EventHandler CreateClicked;
@@ -28,7 +37,7 @@ namespace DogWalkerApp.WinForms
         public event EventHandler SearchClicked;
         public event EventHandler ClientSelected;
 
-        public ClientForm()
+        public ClientForm(DogWalkerDbContext context)
         {
             InitializeComponent();
             InitializeGrid();
@@ -37,6 +46,9 @@ namespace DogWalkerApp.WinForms
             btnCreate.Enabled = false;
             btnUpdate.Enabled = false;
             btnDelete.Enabled = false;
+
+            _context = context;
+            _service = new ClientService(_context);
         }
 
         private void InitializeGrid()
@@ -200,6 +212,32 @@ namespace DogWalkerApp.WinForms
 
             return true;
         }
+
+        private void BtnViewSubscription_Click(object sender, EventArgs e)
+        {
+            if (SelectedClientId == -1)
+            {
+                ShowMessage("Please select a client first.");
+                return;
+            }
+
+            var client = _service.GetById(SelectedClientId);
+            if (client == null)
+            {
+                ShowMessage("Client not found.");
+                return;
+            }
+
+            var form = new SubscriptionForm();
+            form.LoadClientFromExternal(client); // bloquear selección
+            new SubscriptionPresenter(
+                form,
+                new SubscriptionService(_context),
+                new ClientService(_context)
+            );
+            form.ShowDialog();
+        }
+
         #endregion
 
         private void UpdateButtonStates()

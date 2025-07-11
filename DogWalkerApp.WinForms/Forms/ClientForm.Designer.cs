@@ -33,6 +33,7 @@
             btnSearch = new Button();
             dgvClients = new DataGridView();
             AddUpdateClientGB = new GroupBox();
+            btnViewSubscription = new Button();
             btnDelete = new Button();
             btnUpdate = new Button();
             btnCreate = new Button();
@@ -89,12 +90,13 @@
             dgvClients.ReadOnly = true;
             dgvClients.RowHeadersWidth = 51;
             dgvClients.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvClients.Size = new Size(690, 188);
+            dgvClients.Size = new Size(722, 188);
             dgvClients.TabIndex = 4;
             dgvClients.SelectionChanged += DgvClients_SelectionChanged;
             // 
             // AddUpdateClientGB
             // 
+            AddUpdateClientGB.Controls.Add(btnViewSubscription);
             AddUpdateClientGB.Controls.Add(btnDelete);
             AddUpdateClientGB.Controls.Add(btnUpdate);
             AddUpdateClientGB.Controls.Add(btnCreate);
@@ -107,14 +109,24 @@
             AddUpdateClientGB.Controls.Add(label2);
             AddUpdateClientGB.Location = new Point(37, 378);
             AddUpdateClientGB.Name = "AddUpdateClientGB";
-            AddUpdateClientGB.Size = new Size(690, 255);
+            AddUpdateClientGB.Size = new Size(722, 255);
             AddUpdateClientGB.TabIndex = 5;
             AddUpdateClientGB.TabStop = false;
             AddUpdateClientGB.Text = "Create or Update Client";
             // 
+            // btnViewSubscription
+            // 
+            btnViewSubscription.Location = new Point(517, 219);
+            btnViewSubscription.Name = "btnViewSubscription";
+            btnViewSubscription.Size = new Size(183, 29);
+            btnViewSubscription.TabIndex = 12;
+            btnViewSubscription.Text = "Manage Subscription";
+            btnViewSubscription.UseVisualStyleBackColor = true;
+            btnViewSubscription.Click += BtnViewSubscription_Click;
+            // 
             // btnDelete
             // 
-            btnDelete.Location = new Point(550, 142);
+            btnDelete.Location = new Point(606, 142);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(94, 29);
             btnDelete.TabIndex = 11;
@@ -124,7 +136,7 @@
             // 
             // btnUpdate
             // 
-            btnUpdate.Location = new Point(550, 88);
+            btnUpdate.Location = new Point(606, 88);
             btnUpdate.Name = "btnUpdate";
             btnUpdate.Size = new Size(94, 29);
             btnUpdate.TabIndex = 10;
@@ -134,7 +146,7 @@
             // 
             // btnCreate
             // 
-            btnCreate.Location = new Point(550, 37);
+            btnCreate.Location = new Point(606, 37);
             btnCreate.Name = "btnCreate";
             btnCreate.Size = new Size(94, 29);
             btnCreate.TabIndex = 9;
@@ -144,7 +156,7 @@
             // 
             // btnClear
             // 
-            btnClear.Location = new Point(122, 204);
+            btnClear.Location = new Point(12, 211);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(94, 29);
             btnClear.TabIndex = 8;
@@ -250,5 +262,6 @@
         private Button btnUpdate;
         private Button btnCreate;
         private Label label1;
+        private Button btnViewSubscription;
     }
 }
