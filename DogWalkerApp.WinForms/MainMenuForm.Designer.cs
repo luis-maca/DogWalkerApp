@@ -28,12 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "MainMenuForm";
+            btnClients = new Button();
+            SuspendLayout();
+            // 
+            // btnClients
+            // 
+            btnClients.Location = new Point(44, 188);
+            btnClients.Name = "btnClients";
+            btnClients.Size = new Size(94, 60);
+            btnClients.TabIndex = 0;
+            btnClients.Text = "Manage Clients";
+            btnClients.UseVisualStyleBackColor = true;
+            btnClients.Click += btnClients_Click;
+            // 
+            // MainMenuForm
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(btnClients);
+            Name = "MainMenuForm";
+            Text = "MainMenuForm";
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private Button btnClients;
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using DogWalkerApp.Infrastructure.Data;
+using System.Windows.Forms;
 
 
 namespace DogWalkerApp.WinForms
@@ -27,8 +28,7 @@ namespace DogWalkerApp.WinForms
             //Seed the database for initial setup
             DbInitializer.Seed(context);
 
-
-            Application.Run(new MainMenuForm(context));
+            System.Windows.Forms.Application.Run(new MainMenuForm(context));
         }
     }
 }

@@ -1,4 +1,8 @@
-﻿using DogWalkerApp.Infrastructure.Data;
+﻿using DogWalkerApp.Application.Interfaces;
+using DogWalkerApp.Infrastructure.Data;
+using DogWalkerApp.Infrastructure.Data;
+using DogWalkerApp.Infrastructure.Services;
+using DogWalkerApp.WinForms.Presenters;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace DogWalkerApp.WinForms
 {
     public partial class MainMenuForm : Form
@@ -19,9 +24,15 @@ namespace DogWalkerApp.WinForms
         {
             InitializeComponent();
             _context = context;
-
-            var walkerCount = _context.Walkers.Count();
-            MessageBox.Show($"Seeded Walkers: {walkerCount}");
         }
+
+        private void btnClients_Click(object sender, EventArgs e)
+        {
+            var form = new ClientForm();
+            var service = new ClientService(_context);
+            var presenter = new ClientPresenter(form, service);
+            form.ShowDialog();
+        }
+
     }
 }

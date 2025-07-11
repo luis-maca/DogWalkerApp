@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DogWalkerApp.Application\DogWalkerApp.Application.csproj" />
     <ProjectReference Include="..\DogWalkerApp.Domain\DogWalkerApp.Domain.csproj" />
   </ItemGroup>
 

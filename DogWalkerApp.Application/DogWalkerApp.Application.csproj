@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DogWalkerApp.Domain\DogWalkerApp.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
