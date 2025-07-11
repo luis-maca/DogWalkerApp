@@ -1,10 +1,12 @@
-﻿namespace DogWalkerApp.Domain.Entities;
+﻿using DogWalkerApp.Domain.Enums;
+
+namespace DogWalkerApp.Domain.Entities;
 
 public class Subscription: BaseEntity
 {
     public int Id { get; set; }
 
-    public string Frequency { get; set; } // e.g. monthly, weekly, yearly
+    public SubscriptionFrequency Frequency { get; set; }
 
     public int MaxDogsAllowed { get; set; }
 

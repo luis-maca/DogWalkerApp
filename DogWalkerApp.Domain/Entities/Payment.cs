@@ -1,4 +1,6 @@
-﻿namespace DogWalkerApp.Domain.Entities;
+﻿using DogWalkerApp.Domain.Enums;
+
+namespace DogWalkerApp.Domain.Entities;
 
 public class Payment : BaseEntity
 {
@@ -8,7 +10,7 @@ public class Payment : BaseEntity
 
     public decimal Amount { get; set; }
 
-    public string Method { get; set; }
+    public PaymentMethod Method { get; set; }
 
     public int SubscriptionId { get; set; }
 

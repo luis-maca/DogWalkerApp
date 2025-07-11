@@ -1,4 +1,6 @@
-﻿namespace DogWalkerApp.Domain.Entities;
+﻿using DogWalkerApp.Domain.Enums;
+
+namespace DogWalkerApp.Domain.Entities;
 
 public class Dog : BaseEntity
 {
@@ -6,7 +8,7 @@ public class Dog : BaseEntity
 
     public string Name { get; set; }
 
-    public string Breed { get; set; }
+    public  DogBreed Breed { get; set; }
 
     public int Age { get; set; }
 

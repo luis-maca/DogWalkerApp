@@ -1,4 +1,5 @@
 ﻿using DogWalkerApp.Domain.Entities;
+using DogWalkerApp.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DogWalkerApp.Infrastructure.Data;
@@ -7,7 +8,6 @@ public static class DbInitializer
 {
     public static void Seed(DogWalkerDbContext context)
     {
-        // This is to avoid seeding the database multiple times
         if (context.Clients.Any() || context.Walkers.Any() || context.AppConfigurations.Any())
             return;
 
@@ -38,7 +38,7 @@ public static class DbInitializer
                 Address = "123 Biscayne Blvd, Miami, FL",
                 Subscription = new Subscription
                 {
-                    Frequency = "monthly",
+                    Frequency = SubscriptionFrequency.Monthly,
                     MaxDogsAllowed = 2,
                     IsActive = true,
                     Payments = new List<Payment>
@@ -47,7 +47,7 @@ public static class DbInitializer
                         {
                             Date = DateTime.UtcNow,
                             Amount = 30.00m,
-                            Method = "card"
+                            Method = PaymentMethod.Card
                         }
                     }
                 }
@@ -59,7 +59,7 @@ public static class DbInitializer
                 Address = "456 Coral Way, Miami, FL",
                 Subscription = new Subscription
                 {
-                    Frequency = "monthly",
+                    Frequency = SubscriptionFrequency.Monthly,
                     MaxDogsAllowed = 1,
                     IsActive = true,
                     Payments = new List<Payment>
@@ -68,7 +68,7 @@ public static class DbInitializer
                         {
                             Date = DateTime.UtcNow,
                             Amount = 30.00m,
-                            Method = "cash"
+                            Method = PaymentMethod.Cash
                         }
                     }
                 }
@@ -80,7 +80,7 @@ public static class DbInitializer
                 Address = "789 Sunset Dr, Miami, FL",
                 Subscription = new Subscription
                 {
-                    Frequency = "monthly",
+                    Frequency = SubscriptionFrequency.Monthly,
                     MaxDogsAllowed = 2,
                     IsActive = false,
                     Payments = new List<Payment>
@@ -89,7 +89,7 @@ public static class DbInitializer
                         {
                             Date = DateTime.UtcNow.AddDays(-35),
                             Amount = 30.00m,
-                            Method = "cash"
+                            Method = PaymentMethod.Cash
                         }
                     }
                 }

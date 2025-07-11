@@ -20,38 +20,47 @@ public class DogWalkerDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Client → Dog (1:N)
         modelBuilder.Entity<Client>()
             .HasMany(c => c.Dogs)
             .WithOne(d => d.Client)
             .HasForeignKey(d => d.ClientId);
 
-        // Client → Subscription (1:1)
         modelBuilder.Entity<Client>()
             .HasOne(c => c.Subscription)
             .WithOne(s => s.Client)
             .HasForeignKey<Subscription>(s => s.ClientId);
 
-        // Dog → DogWalk (1:N)
         modelBuilder.Entity<Dog>()
             .HasMany(d => d.Walks)
             .WithOne(w => w.Dog)
             .HasForeignKey(w => w.DogId);
 
-        // Walker → DogWalk (1:N)
         modelBuilder.Entity<Walker>()
             .HasMany(w => w.Walks)
             .WithOne(dw => dw.Walker)
             .HasForeignKey(dw => dw.WalkerId);
 
-        // Subscription → Payment (1:N)
         modelBuilder.Entity<Subscription>()
             .HasMany(s => s.Payments)
             .WithOne(p => p.Subscription)
             .HasForeignKey(p => p.SubscriptionId);
 
+        // ENUM Mappings for this entities to store string insted of int
+        modelBuilder.Entity<Subscription>()
+            .Property(s => s.Frequency)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Payment>()
+            .Property(p => p.Method)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Dog>()
+            .Property(d => d.Breed)
+            .HasConversion<string>();
+
         base.OnModelCreating(modelBuilder);
     }
+
 
     public override int SaveChanges()
     {
