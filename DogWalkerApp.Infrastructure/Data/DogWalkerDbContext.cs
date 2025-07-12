@@ -12,6 +12,8 @@ public class DogWalkerDbContext : DbContext
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<AppConfiguration> AppConfigurations { get; set; }
+    public DbSet<DogWalkDog> DogWalkDogs { get; set; }
+
 
     public DogWalkerDbContext(DbContextOptions<DogWalkerDbContext> options)
         : base(options)
@@ -44,6 +46,20 @@ public class DogWalkerDbContext : DbContext
             .HasMany(s => s.Payments)
             .WithOne(p => p.Subscription)
             .HasForeignKey(p => p.SubscriptionId);
+
+        modelBuilder.Entity<DogWalkDog>()
+    .HasKey(dwd => new { dwd.DogId, dwd.DogWalkId });
+
+        modelBuilder.Entity<DogWalkDog>()
+            .HasOne(dwd => dwd.Dog)
+            .WithMany(d => d.Walks)
+            .HasForeignKey(dwd => dwd.DogId);
+
+        modelBuilder.Entity<DogWalkDog>()
+            .HasOne(dwd => dwd.DogWalk)
+            .WithMany(dw => dw.Dogs)
+            .HasForeignKey(dwd => dwd.DogWalkId);
+
 
         // ENUM Mappings for this entities to store string insted of int
         modelBuilder.Entity<Subscription>()

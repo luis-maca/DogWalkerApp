@@ -3,6 +3,7 @@ using System;
 using DogWalkerApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DogWalkerApp.Infrastructure.Migrations
 {
     [DbContext(typeof(DogWalkerDbContext))]
-    partial class DogWalkerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250712193006_AddDogWalkDogRelation")]
+    partial class AddDogWalkDogRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.7");

@@ -18,5 +18,6 @@ public class Dog : BaseEntity
 
     public Client Client { get; set; }
 
-    public ICollection<DogWalk> Walks { get; set; }
+    public ICollection<DogWalkDog> Walks { get; set; } = new List<DogWalkDog>();
+
 }

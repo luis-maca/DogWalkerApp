@@ -8,9 +8,7 @@ public class DogWalk : BaseEntity
 
     public int DurationMinutes { get; set; }
 
-    public int DogId { get; set; }
-
-    public Dog Dog { get; set; }
+    public ICollection<DogWalkDog> Dogs { get; set; } = new List<DogWalkDog>();
 
     public int WalkerId { get; set; }
 
