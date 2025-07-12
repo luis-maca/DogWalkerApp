@@ -22,7 +22,8 @@ namespace DogWalkerApp.WinForms
         }
 
         private void InitializeMenu()
-        {
+        {   
+            //Clients
             var clientsMenuItem = new ToolStripMenuItem("Clients");
             clientsMenuItem.Click += (s, e) =>
             {
@@ -31,7 +32,7 @@ namespace DogWalkerApp.WinForms
                 OpenChildForm(form, "Clients");
             };
 
-
+            //Subscriptions
             var subscriptionsMenuItem = new ToolStripMenuItem("Subscriptions");
             subscriptionsMenuItem.Click += (s, e) =>
             {
@@ -40,8 +41,22 @@ namespace DogWalkerApp.WinForms
                 OpenChildForm(form, "Subscriptions");
             };
 
+            //Payments
+            var paymentsMenuItem = new ToolStripMenuItem("Payments");
+            paymentsMenuItem.Click += (s, e) =>
+            {
+                var form = new PaymentForm();
+                new PaymentPresenter(
+                    form,
+                    new PaymentService(_context),
+                    new SubscriptionService(_context)
+                );
+                OpenChildForm(form, "Payments");
+            };
+
             mainMenuStrip.Items.Add(clientsMenuItem);
             mainMenuStrip.Items.Add(subscriptionsMenuItem);
+            mainMenuStrip.Items.Add(paymentsMenuItem);
         }
 
         private void OpenChildForm(Form childForm, string title)

@@ -89,7 +89,7 @@
             dgvClients.ReadOnly = true;
             dgvClients.RowHeadersWidth = 51;
             dgvClients.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvClients.Size = new Size(722, 188);
+            dgvClients.Size = new Size(722, 255);
             dgvClients.TabIndex = 4;
             dgvClients.SelectionChanged += DgvClients_SelectionChanged;
             // 
@@ -105,7 +105,7 @@
             AddUpdateClientGB.Controls.Add(label4);
             AddUpdateClientGB.Controls.Add(label3);
             AddUpdateClientGB.Controls.Add(label2);
-            AddUpdateClientGB.Location = new Point(37, 378);
+            AddUpdateClientGB.Location = new Point(37, 440);
             AddUpdateClientGB.Name = "AddUpdateClientGB";
             AddUpdateClientGB.Size = new Size(722, 255);
             AddUpdateClientGB.TabIndex = 5;
@@ -217,7 +217,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 675);
+            ClientSize = new Size(878, 758);
             Controls.Add(label1);
             Controls.Add(AddUpdateClientGB);
             Controls.Add(dgvClients);

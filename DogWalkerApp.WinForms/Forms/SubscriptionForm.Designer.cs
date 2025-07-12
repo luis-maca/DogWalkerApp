@@ -98,7 +98,7 @@
             dgvSubscriptions.Name = "dgvSubscriptions";
             dgvSubscriptions.ReadOnly = true;
             dgvSubscriptions.RowHeadersWidth = 51;
-            dgvSubscriptions.Size = new Size(744, 159);
+            dgvSubscriptions.Size = new Size(744, 225);
             dgvSubscriptions.TabIndex = 4;
             // 
             // groupBox1
@@ -115,7 +115,7 @@
             groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
-            groupBox1.Location = new Point(26, 347);
+            groupBox1.Location = new Point(26, 399);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(744, 345);
             groupBox1.TabIndex = 5;
@@ -238,7 +238,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 735);
+            ClientSize = new Size(800, 781);
             Controls.Add(groupBox1);
             Controls.Add(dgvSubscriptions);
             Controls.Add(btnSearch);

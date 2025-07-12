@@ -7,14 +7,16 @@ namespace DogWalkerApp.Domain.Helpers
 {
     public static class EnumHelper
     {
-        public static string GetDescription(Enum value)
+        public static string GetDescription<TEnum>(TEnum value)
         {
-            var field = value.GetType().GetField(value.ToString());
-            if (field == null) return value.ToString();
+            if (!Enum.IsDefined(typeof(TEnum), value))
+                return value?.ToString() ?? string.Empty;
 
-            var attribute = field.GetCustomAttribute<DescriptionAttribute>();
-            return attribute != null ? attribute.Description : value.ToString();
+            var field = typeof(TEnum).GetField(value.ToString());
+            var attr = field?.GetCustomAttribute<DescriptionAttribute>();
+            return attr?.Description ?? value.ToString();
         }
+
 
         public static TEnum[] GetValues<TEnum>() where TEnum : Enum
         {
