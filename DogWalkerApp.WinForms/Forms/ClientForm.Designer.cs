@@ -33,7 +33,6 @@
             btnSearch = new Button();
             dgvClients = new DataGridView();
             AddUpdateClientGB = new GroupBox();
-            btnViewSubscription = new Button();
             btnDelete = new Button();
             btnUpdate = new Button();
             btnCreate = new Button();
@@ -96,7 +95,6 @@
             // 
             // AddUpdateClientGB
             // 
-            AddUpdateClientGB.Controls.Add(btnViewSubscription);
             AddUpdateClientGB.Controls.Add(btnDelete);
             AddUpdateClientGB.Controls.Add(btnUpdate);
             AddUpdateClientGB.Controls.Add(btnCreate);
@@ -113,16 +111,6 @@
             AddUpdateClientGB.TabIndex = 5;
             AddUpdateClientGB.TabStop = false;
             AddUpdateClientGB.Text = "Create or Update Client";
-            // 
-            // btnViewSubscription
-            // 
-            btnViewSubscription.Location = new Point(517, 219);
-            btnViewSubscription.Name = "btnViewSubscription";
-            btnViewSubscription.Size = new Size(183, 29);
-            btnViewSubscription.TabIndex = 12;
-            btnViewSubscription.Text = "Manage Subscription";
-            btnViewSubscription.UseVisualStyleBackColor = true;
-            btnViewSubscription.Click += BtnViewSubscription_Click;
             // 
             // btnDelete
             // 
@@ -262,6 +250,5 @@
         private Button btnUpdate;
         private Button btnCreate;
         private Label label1;
-        private Button btnViewSubscription;
     }
 }

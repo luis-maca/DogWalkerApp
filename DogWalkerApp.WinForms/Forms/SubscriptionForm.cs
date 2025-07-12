@@ -29,8 +29,6 @@ namespace DogWalkerApp.WinForms.Forms
         public string SearchTerm => txtSearch.Text.Trim();
         public bool SearchAllChecked => chkSearchAll.Checked;
 
-        //This one is used to control the loading from external sources
-        public bool IsClientLocked { get; private set; }
 
         public event EventHandler CreateClicked;
         public event EventHandler UpdateClicked;
@@ -43,17 +41,6 @@ namespace DogWalkerApp.WinForms.Forms
             InitializeComponent();
             InitializeGrid();
             LoadFrequencyDropdown();
-        }
-
-        public void LoadClientFromExternal(ClientDto client)
-        {
-            IsClientLocked = true;
-
-            cmbClients.DataSource = new List<ClientDto> { client };
-            cmbClients.DisplayMember = "Name";
-            cmbClients.ValueMember = "Id";
-            cmbClients.SelectedValue = client.Id;
-            cmbClients.Enabled = false;
         }
 
         private void InitializeGrid()

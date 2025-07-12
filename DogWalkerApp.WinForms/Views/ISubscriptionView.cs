@@ -14,7 +14,6 @@ public interface ISubscriptionView
 
     string SearchTerm { get; }
     bool SearchAllChecked { get; }
-    bool IsClientLocked { get; }
 
     void LoadSubscriptions(IEnumerable<SubscriptionDto> items);
     void LoadClients(IEnumerable<ClientDto> clients);

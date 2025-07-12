@@ -1,49 +1,62 @@
 ﻿using DogWalkerApp.Application.Interfaces;
 using DogWalkerApp.Infrastructure.Data;
-using DogWalkerApp.Infrastructure.Data;
 using DogWalkerApp.Infrastructure.Services;
 using DogWalkerApp.WinForms.Forms;
 using DogWalkerApp.WinForms.Presenters;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
 
 namespace DogWalkerApp.WinForms
 {
     public partial class MainMenuForm : Form
     {
         private readonly DogWalkerDbContext _context;
+
         public MainMenuForm(DogWalkerDbContext context)
         {
             InitializeComponent();
             _context = context;
+
+            InitializeMenu();
         }
 
-        private void btnClients_Click(object sender, EventArgs e)
+        private void InitializeMenu()
         {
-            var form = new ClientForm(_context);
-            new ClientPresenter(form, new ClientService(_context));
-            form.ShowDialog();
+            var clientsMenuItem = new ToolStripMenuItem("Clients");
+            clientsMenuItem.Click += (s, e) =>
+            {
+                var form = new ClientForm(_context);
+                new ClientPresenter(form, new ClientService(_context));
+                OpenChildForm(form, "Clients");
+            };
+
+
+            var subscriptionsMenuItem = new ToolStripMenuItem("Subscriptions");
+            subscriptionsMenuItem.Click += (s, e) =>
+            {
+                var form = new SubscriptionForm();
+                new SubscriptionPresenter(form, new SubscriptionService(_context), new ClientService(_context));
+                OpenChildForm(form, "Subscriptions");
+            };
+
+            mainMenuStrip.Items.Add(clientsMenuItem);
+            mainMenuStrip.Items.Add(subscriptionsMenuItem);
         }
 
-        private void BtnSubscriptions_Click(object sender, EventArgs e)
+        private void OpenChildForm(Form childForm, string title)
         {
-            var form = new SubscriptionForm();
-            new SubscriptionPresenter(
-                form,
-                new SubscriptionService(_context),
-                new ClientService(_context)
-            );
-            form.ShowDialog();
-        }
+            panelContent.Controls.Clear();
 
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+
+            panelContent.Controls.Add(childForm);
+            childForm.Show();
+
+            this.Text = $"DogWalkerApp - {title}";
+        }
     }
+
 }

@@ -22,8 +22,8 @@ public class SubscriptionPresenter
         _view.SearchClicked += OnSearch;
         _view.SubscriptionSelected += OnSelected;
 
-        if (!_view.IsClientLocked)
-            LoadClients();
+
+        LoadClients();
 
         LoadSubscriptions();
     }

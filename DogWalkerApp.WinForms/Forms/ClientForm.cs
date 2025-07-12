@@ -212,32 +212,7 @@ namespace DogWalkerApp.WinForms
 
             return true;
         }
-
-        private void BtnViewSubscription_Click(object sender, EventArgs e)
-        {
-            if (SelectedClientId == -1)
-            {
-                ShowMessage("Please select a client first.");
-                return;
-            }
-
-            var client = _service.GetById(SelectedClientId);
-            if (client == null)
-            {
-                ShowMessage("Client not found.");
-                return;
-            }
-
-            var form = new SubscriptionForm();
-            form.LoadClientFromExternal(client); // bloquear selección
-            new SubscriptionPresenter(
-                form,
-                new SubscriptionService(_context),
-                new ClientService(_context)
-            );
-            form.ShowDialog();
-        }
-
+        
         #endregion
 
         private void UpdateButtonStates()

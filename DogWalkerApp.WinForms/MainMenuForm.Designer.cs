@@ -28,45 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            btnClients = new Button();
-            btnSubscriptions = new Button();
+            mainMenuStrip = new MenuStrip();
+            panelContent = new Panel();
             SuspendLayout();
             // 
-            // btnClients
+            // mainMenuStrip
             // 
-            btnClients.Location = new Point(44, 188);
-            btnClients.Name = "btnClients";
-            btnClients.Size = new Size(94, 60);
-            btnClients.TabIndex = 0;
-            btnClients.Text = "Manage Clients";
-            btnClients.UseVisualStyleBackColor = true;
-            btnClients.Click += btnClients_Click;
+            mainMenuStrip.ImageScalingSize = new Size(20, 20);
+            mainMenuStrip.Location = new Point(0, 0);
+            mainMenuStrip.Name = "mainMenuStrip";
+            mainMenuStrip.Size = new Size(1108, 24);
+            mainMenuStrip.TabIndex = 0;
+            mainMenuStrip.Text = "menuStrip1";
             // 
-            // btnSubscriptions
+            // panelContent
             // 
-            btnSubscriptions.Location = new Point(181, 188);
-            btnSubscriptions.Name = "btnSubscriptions";
-            btnSubscriptions.Size = new Size(113, 60);
-            btnSubscriptions.TabIndex = 1;
-            btnSubscriptions.Text = "Manage Subscriptions";
-            btnSubscriptions.UseVisualStyleBackColor = true;
-            btnSubscriptions.Click += BtnSubscriptions_Click;
+            panelContent.Dock = DockStyle.Fill;
+            panelContent.Location = new Point(0, 24);
+            panelContent.Name = "panelContent";
+            panelContent.Size = new Size(1108, 724);
+            panelContent.TabIndex = 1;
             // 
             // MainMenuForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(btnSubscriptions);
-            Controls.Add(btnClients);
+            ClientSize = new Size(1108, 748);
+            Controls.Add(panelContent);
+            Controls.Add(mainMenuStrip);
+            MainMenuStrip = mainMenuStrip;
             Name = "MainMenuForm";
             Text = "MainMenuForm";
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private Button btnClients;
-        private Button btnSubscriptions;
+        private MenuStrip mainMenuStrip;
+        private Panel panelContent;
     }
 }
