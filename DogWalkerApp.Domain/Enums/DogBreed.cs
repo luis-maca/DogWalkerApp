@@ -4,6 +4,9 @@ namespace DogWalkerApp.Domain.Enums
 {
     public enum DogBreed
     {
+        [Description("Unknown")]
+        Unknown = 0,
+
         [Description("Labrador Retriever")]
         Labrador = 1,
 

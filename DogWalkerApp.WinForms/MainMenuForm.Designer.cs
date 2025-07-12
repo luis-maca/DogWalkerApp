@@ -46,14 +46,14 @@
             panelContent.Dock = DockStyle.Fill;
             panelContent.Location = new Point(0, 24);
             panelContent.Name = "panelContent";
-            panelContent.Size = new Size(874, 724);
+            panelContent.Size = new Size(874, 927);
             panelContent.TabIndex = 1;
             // 
             // MainMenuForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(874, 748);
+            ClientSize = new Size(874, 951);
             Controls.Add(panelContent);
             Controls.Add(mainMenuStrip);
             MainMenuStrip = mainMenuStrip;

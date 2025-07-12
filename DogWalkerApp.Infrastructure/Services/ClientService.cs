@@ -24,7 +24,10 @@ public class ClientService : IClientService
                 Id = c.Id,
                 Name = c.Name,
                 PhoneNumber = c.PhoneNumber,
-                Address = c.Address
+                Address = c.Address,
+                HasActiveSubscription = c.Subscription != null && c.Subscription.IsActive,
+                MaxDogsAllowed = c.Subscription != null ? c.Subscription.MaxDogsAllowed : 0,
+                DogCount = c.Dogs.Count
             })
             .ToList();
     }

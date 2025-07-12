@@ -63,10 +63,21 @@ namespace DogWalkerApp.WinForms
                 OpenChildForm(form, "Walkers");
             };
 
+            //Dogs
+            var dogsMenuItem = new ToolStripMenuItem("Dogs");
+            dogsMenuItem.Click += (s, e) =>
+            {
+                var form = new DogForm();
+                new DogPresenter(form, new DogService(_context), new ClientService(_context));
+                OpenChildForm(form, "Dogs");
+            };
+
             mainMenuStrip.Items.Add(clientsMenuItem);
             mainMenuStrip.Items.Add(subscriptionsMenuItem);
             mainMenuStrip.Items.Add(paymentsMenuItem);
             mainMenuStrip.Items.Add(walkersMenuItem);
+            mainMenuStrip.Items.Add(dogsMenuItem);
+
         }
 
         private void OpenChildForm(Form childForm, string title)

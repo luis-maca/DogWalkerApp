@@ -12,7 +12,7 @@ public class Dog : BaseEntity
 
     public int Age { get; set; }
 
-    public string? SpecialCareInstructions { get; set; }
+    public string? SpecialCareInstructions { get; set; } = "";
 
     public int ClientId { get; set; }
 
