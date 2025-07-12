@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogWalkerApp.WinForms", "DogWalkerApp.WinForms.csproj", "{BD637BE9-BD20-42BC-A5AB-E34837A58081}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogWalkerApp.Domain", "..\DogWalkerApp.Domain\DogWalkerApp.Domain.csproj", "{1D3516DE-C1DE-419C-97B3-3B492B114C29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogWalkerApp.Application", "..\DogWalkerApp.Application\DogWalkerApp.Application.csproj", "{0C397B4E-C24C-4283-9B9A-CEF0BD748AA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogWalkerApp.Infrastructure", "..\DogWalkerApp.Infrastructure\DogWalkerApp.Infrastructure.csproj", "{0AC36A1A-CD17-4485-A103-08CCD416077A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogWalkerApp.Tests", "..\DogWalkerApp.Tests\DogWalkerApp.Tests.csproj", "{C6145865-763D-4AED-B5B0-938FB5AC858D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD637BE9-BD20-42BC-A5AB-E34837A58081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD637BE9-BD20-42BC-A5AB-E34837A58081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD637BE9-BD20-42BC-A5AB-E34837A58081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD637BE9-BD20-42BC-A5AB-E34837A58081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D3516DE-C1DE-419C-97B3-3B492B114C29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D3516DE-C1DE-419C-97B3-3B492B114C29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D3516DE-C1DE-419C-97B3-3B492B114C29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D3516DE-C1DE-419C-97B3-3B492B114C29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C397B4E-C24C-4283-9B9A-CEF0BD748AA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C397B4E-C24C-4283-9B9A-CEF0BD748AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C397B4E-C24C-4283-9B9A-CEF0BD748AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C397B4E-C24C-4283-9B9A-CEF0BD748AA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AC36A1A-CD17-4485-A103-08CCD416077A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AC36A1A-CD17-4485-A103-08CCD416077A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AC36A1A-CD17-4485-A103-08CCD416077A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC36A1A-CD17-4485-A103-08CCD416077A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6145865-763D-4AED-B5B0-938FB5AC858D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6145865-763D-4AED-B5B0-938FB5AC858D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6145865-763D-4AED-B5B0-938FB5AC858D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6145865-763D-4AED-B5B0-938FB5AC858D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C6145865-763D-4AED-B5B0-938FB5AC858D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68EF9BDA-754E-47B5-BD1D-69F78A662473}
+	EndGlobalSection
+EndGlobal
