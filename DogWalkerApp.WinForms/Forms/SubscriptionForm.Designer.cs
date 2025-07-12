@@ -100,6 +100,7 @@
             dgvSubscriptions.RowHeadersWidth = 51;
             dgvSubscriptions.Size = new Size(744, 225);
             dgvSubscriptions.TabIndex = 4;
+            dgvSubscriptions.SelectionChanged += DgvSubscriptions_SelectionChanged;
             // 
             // groupBox1
             // 
@@ -238,7 +239,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 781);
+            ClientSize = new Size(876, 781);
             Controls.Add(groupBox1);
             Controls.Add(dgvSubscriptions);
             Controls.Add(btnSearch);

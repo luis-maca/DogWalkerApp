@@ -100,6 +100,7 @@
             dgvPayments.RowHeadersWidth = 51;
             dgvPayments.Size = new Size(730, 241);
             dgvPayments.TabIndex = 5;
+            dgvPayments.SelectionChanged += DgvPayments_SelectionChanged;
             // 
             // groupBox1
             // 
@@ -168,6 +169,7 @@
             numAmount.Name = "numAmount";
             numAmount.Size = new Size(295, 27);
             numAmount.TabIndex = 7;
+            numAmount.ValueChanged += NumAmount_ValueChanged;
             // 
             // cmbMethod
             // 
@@ -176,6 +178,7 @@
             cmbMethod.Name = "cmbMethod";
             cmbMethod.Size = new Size(295, 28);
             cmbMethod.TabIndex = 6;
+            cmbMethod.SelectedIndexChanged += CmbMethod_SelectedIndexChanged;
             // 
             // dtpDate
             // 
@@ -191,6 +194,7 @@
             cmbSubscriptions.Name = "cmbSubscriptions";
             cmbSubscriptions.Size = new Size(295, 28);
             cmbSubscriptions.TabIndex = 4;
+            cmbSubscriptions.SelectedIndexChanged += CmbSubscriptions_SelectedIndexChanged;
             // 
             // label5
             // 
@@ -232,7 +236,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1079, 723);
+            ClientSize = new Size(874, 723);
             Controls.Add(groupBox1);
             Controls.Add(dgvPayments);
             Controls.Add(btnSearch);

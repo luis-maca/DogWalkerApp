@@ -37,7 +37,7 @@
             mainMenuStrip.ImageScalingSize = new Size(20, 20);
             mainMenuStrip.Location = new Point(0, 0);
             mainMenuStrip.Name = "mainMenuStrip";
-            mainMenuStrip.Size = new Size(1108, 24);
+            mainMenuStrip.Size = new Size(874, 24);
             mainMenuStrip.TabIndex = 0;
             mainMenuStrip.Text = "menuStrip1";
             // 
@@ -46,14 +46,14 @@
             panelContent.Dock = DockStyle.Fill;
             panelContent.Location = new Point(0, 24);
             panelContent.Name = "panelContent";
-            panelContent.Size = new Size(1108, 724);
+            panelContent.Size = new Size(874, 724);
             panelContent.TabIndex = 1;
             // 
             // MainMenuForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1108, 748);
+            ClientSize = new Size(874, 748);
             Controls.Add(panelContent);
             Controls.Add(mainMenuStrip);
             MainMenuStrip = mainMenuStrip;
