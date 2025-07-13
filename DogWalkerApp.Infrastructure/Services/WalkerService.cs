@@ -27,6 +27,19 @@ public class WalkerService : IWalkerService
             }).ToList();
     }
 
+    public List<WalkerDto> GetAllActive()
+    {
+        return _context.Walkers
+            .Where(w => !w.IsDeleted && w.IsAvailable)
+            .Select(w => new WalkerDto
+            {
+                Id = w.Id,
+                FullName = w.FullName,
+                PhoneNumber = w.PhoneNumber,
+                IsAvailable = w.IsAvailable
+            }).ToList();
+    }
+
     public WalkerDto? GetById(int id)
     {
         var w = _context.Walkers.FirstOrDefault(x => x.Id == id && !x.IsDeleted);

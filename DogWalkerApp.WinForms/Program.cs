@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using DogWalkerApp.Infrastructure.Data;
+using DogWalkerApp.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
 using System.Windows.Forms;
 
 
@@ -25,10 +26,12 @@ namespace DogWalkerApp.WinForms
             using var context = new DogWalkerDbContext(options);
             context.Database.Migrate();
 
+            var loginService = new LoginService(context);
+
             //Seed the database for initial setup
             DbInitializer.Seed(context);
 
-            System.Windows.Forms.Application.Run(new MainMenuForm(context));
+            System.Windows.Forms.Application.Run(new LoginForm(loginService,context));
         }
     }
 }

@@ -5,6 +5,7 @@ using DogWalkerApp.WinForms.Forms;
 using DogWalkerApp.WinForms.Presenters;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace DogWalkerApp.WinForms
@@ -15,14 +16,25 @@ namespace DogWalkerApp.WinForms
 
         public MainMenuForm(DogWalkerDbContext context)
         {
-            InitializeComponent();
             _context = context;
 
+            InitializeComponent();            
             InitializeMenu();
+            var form = new HomeForm(_context, new DogWalkService(_context));
+            OpenChildForm(form, "Home");
+
         }
 
         private void InitializeMenu()
-        {   
+        {
+            //Home
+            var homeMenuItem = new ToolStripMenuItem("Home");
+            homeMenuItem.Click += (s, e) =>
+            {
+                var form = new HomeForm(_context, new DogWalkService(_context));
+                OpenChildForm(form, "Home");
+            };
+
             //Clients
             var clientsMenuItem = new ToolStripMenuItem("Clients");
             clientsMenuItem.Click += (s, e) =>
@@ -81,28 +93,65 @@ namespace DogWalkerApp.WinForms
                 OpenChildForm(form, "Dog Walks");
             };
 
+            var exitMenuItem = new ToolStripMenuItem("Exit");
+            exitMenuItem.Alignment = ToolStripItemAlignment.Right;
+            exitMenuItem.ForeColor = Color.Red;
+            exitMenuItem.Font = new Font(exitMenuItem.Font, FontStyle.Bold);
+            exitMenuItem.Click += (s, e) =>
+            {
+                var result = MessageBox.Show(
+                    "Are you sure you want to log out and return to the login screen?",
+                    "Confirm Exit",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.Yes)
+                {
+                    this.Hide();
+                    var loginForm = new LoginForm(new LoginService(_context), _context);
+                    loginForm.Show();
+                }
+            };
+
+
+            mainMenuStrip.Items.Add(homeMenuItem);
             mainMenuStrip.Items.Add(clientsMenuItem);
             mainMenuStrip.Items.Add(subscriptionsMenuItem);
             mainMenuStrip.Items.Add(paymentsMenuItem);
             mainMenuStrip.Items.Add(walkersMenuItem);
             mainMenuStrip.Items.Add(dogsMenuItem);
             mainMenuStrip.Items.Add(dogWalksMenuItem);
+            mainMenuStrip.Items.Add(exitMenuItem);
 
         }
+
+        private Form _activeForm;
 
         private void OpenChildForm(Form childForm, string title)
         {
-            panelContent.Controls.Clear();
+            if (_activeForm != null)
+                _activeForm.Close();
 
-            childForm.TopLevel = false;
-            childForm.FormBorderStyle = FormBorderStyle.None;
-            childForm.Dock = DockStyle.Fill;
+            _activeForm = childForm;
+            _activeForm.TopLevel = false;
+            _activeForm.FormBorderStyle = FormBorderStyle.None;
+            _activeForm.Dock = DockStyle.Fill;
 
-            panelContent.Controls.Add(childForm);
-            childForm.Show();
-
-            this.Text = $"DogWalkerApp - {title}";
+            this.Controls.Add(_activeForm);
+            this.Tag = _activeForm;
+            _activeForm.BringToFront();
+            _activeForm.Show();
+            this.Text = $"Dog Walker App - {title}";
         }
+
+
+        private void MainMenuForm_Load(object sender, EventArgs e)
+        {
+            var form = new HomeForm(_context, new DogWalkService(_context));
+            OpenChildForm(form, "Home");
+        }
+
     }
 
 }

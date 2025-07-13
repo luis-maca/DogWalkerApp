@@ -17,18 +17,6 @@ namespace DogWalkerApp.WinForms.Forms
         private readonly DogWalkerDbContext _context;
         private readonly IWalkerService _service;
 
-        public WalkerForm(DogWalkerDbContext context)
-        {
-            InitializeComponent();
-            InitializeGrid();
-            _context = context;
-            _service = new WalkerService(_context);
-
-            btnCreate.Enabled = false;
-            btnUpdate.Enabled = false;
-            btnDelete.Enabled = false;
-        }
-
         public string WalkerName => txtName.Text.Trim();
         public string PhoneNumber => txtPhone.Text.Trim();
         public string FullName => txtName.Text.Trim();
@@ -48,51 +36,51 @@ namespace DogWalkerApp.WinForms.Forms
         public event EventHandler SearchClicked;
         public event EventHandler WalkerSelected;
 
-        private void InitializeGrid()
+        private bool _isInitializingWalkers;
+
+        public WalkerForm(DogWalkerDbContext context)
         {
+            InitializeComponent();
+            _context = context;
+            _service = new WalkerService(_context);
+
+            btnCreate.Enabled = false;
+            btnUpdate.Enabled = false;
+            btnDelete.Enabled = false;
+        }
+
+        public void LoadWalkers(IEnumerable<WalkerDto> walkers)
+        {
+            _isInitializingWalkers = true;
+
+            dgvWalkers.SelectionChanged -= DgvWalkers_SelectionChanged;
+
+            var displayList = walkers.Select(w => new
+            {
+                w.Id,
+                w.FullName,
+                w.PhoneNumber,
+                w.IsAvailable
+            }).ToList();
+
+            dgvWalkers.DataSource = null;
             dgvWalkers.Columns.Clear();
-
-            dgvWalkers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Id",
-                HeaderText = "ID",
-                DataPropertyName = "Id",
-                Visible = false
-            });
-
-            dgvWalkers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "FullName",
-                HeaderText = "Name",
-                DataPropertyName = "FullName"
-            });
-
-            dgvWalkers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "PhoneNumber",
-                HeaderText = "Phone",
-                DataPropertyName = "PhoneNumber"
-            });
-
-            dgvWalkers.Columns.Add(new DataGridViewCheckBoxColumn
-            {
-                Name = "IsAvailable",
-                HeaderText = "Available",
-                DataPropertyName = "IsAvailable"
-            });
+            dgvWalkers.DataSource = displayList;
 
             dgvWalkers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvWalkers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvWalkers.MultiSelect = false;
             dgvWalkers.ReadOnly = true;
 
+            dgvWalkers.ClearSelection();
+            dgvWalkers.CurrentCell = null;
+
             dgvWalkers.SelectionChanged += DgvWalkers_SelectionChanged;
+            _isInitializingWalkers = false;
+
+            ClearForm();
         }
 
-        public void LoadWalkers(IEnumerable<WalkerDto> walkers)
-        {
-            dgvWalkers.DataSource = walkers.ToList();
-        }
 
         public void SetWalkerFields(WalkerDto dto)
         {
@@ -163,6 +151,7 @@ namespace DogWalkerApp.WinForms.Forms
 
         private void DgvWalkers_SelectionChanged(object sender, EventArgs e)
         {
+            if (_isInitializingWalkers) return;
             WalkerSelected?.Invoke(this, EventArgs.Empty);
             UpdateButtonStates();
         }

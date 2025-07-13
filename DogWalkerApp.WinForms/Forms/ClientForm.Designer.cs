@@ -91,7 +91,6 @@
             dgvClients.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvClients.Size = new Size(722, 255);
             dgvClients.TabIndex = 4;
-            dgvClients.SelectionChanged += DgvClients_SelectionChanged;
             // 
             // AddUpdateClientGB
             // 

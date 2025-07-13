@@ -13,6 +13,8 @@ public class DogWalkerDbContext : DbContext
     public DbSet<Payment> Payments { get; set; }
     public DbSet<AppConfiguration> AppConfigurations { get; set; }
     public DbSet<DogWalkDog> DogWalkDogs { get; set; }
+    public DbSet<User> Users { get; set; }
+
 
 
     public DogWalkerDbContext(DbContextOptions<DogWalkerDbContext> options)

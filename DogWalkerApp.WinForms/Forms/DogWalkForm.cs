@@ -24,8 +24,6 @@ namespace DogWalkerApp.WinForms.Forms
         public int SelectedAvailableDogId =>
             cmbAvailableDogs.SelectedItem is DogDto d ? d.Id : -1;
         public List<int> SelectedDogIds => _selectedDogs.Select(d => d.Id).ToList();
-
-
         public DateTime WalkDate => dtpWalkDate.Value.Date + dtpWalkTime.Value.TimeOfDay;
         public int DurationMinutes => (int)numDuration.Value;
 
@@ -40,15 +38,15 @@ namespace DogWalkerApp.WinForms.Forms
         public event EventHandler ClientChanged;
 
         private readonly List<DogDto> _selectedDogs = new();
+        private bool _isInitializingWalks = false;
+
 
 
         public DogWalkForm()
         {
             InitializeComponent();
 
-            dtpWalkDate.Format = DateTimePickerFormat.Custom;
-            dtpWalkDate.CustomFormat = "yyyy-MM-dd HH:mm";
-            dtpWalkDate.ShowUpDown = true;
+            dtpWalkDate.ShowUpDown = false;
 
             dgvWalks.SelectionChanged += DgvWalks_SelectionChanged;
             cmbClients.SelectedIndexChanged += cmbClients_SelectedIndexChanged;
@@ -64,10 +62,16 @@ namespace DogWalkerApp.WinForms.Forms
 
             cmbWalker.SelectedIndexChanged += (_, _) => UpdateButtonStates();
             cmbAvailableDogs.SelectedIndexChanged += (_, _) => UpdateButtonStates();
+
+            ClearForm();
         }
 
         public void LoadDogWalks(IEnumerable<DogWalkDto> walks)
         {
+            _isInitializingWalks = true;
+
+            dgvWalks.SelectionChanged -= DgvWalks_SelectionChanged;
+
             var display = walks.Select(w => new
             {
                 w.Id,
@@ -78,8 +82,17 @@ namespace DogWalkerApp.WinForms.Forms
                 Clients = string.Join(", ", w.ClientNames)
             }).ToList();
 
+            dgvWalks.DataSource = null;
             dgvWalks.DataSource = display;
+
+            dgvWalks.ClearSelection();
+            dgvWalks.CurrentCell = null;
+
+            dgvWalks.SelectionChanged += DgvWalks_SelectionChanged;
+            _isInitializingWalks = false;
+            ClearForm();
         }
+
 
         public void LoadWalkers(IEnumerable<WalkerDto> walkers)
         {
@@ -107,7 +120,9 @@ namespace DogWalkerApp.WinForms.Forms
         public void SetFields(DogWalkDto dto)
         {
             cmbWalker.SelectedValue = dto.WalkerId;
-            dtpWalkDate.Value = dto.WalkDate;
+
+            dtpWalkDate.Value = dto.WalkDate.Date;
+            dtpWalkTime.Value = DateTime.Today.Date + dto.WalkDate.TimeOfDay;
 
             _selectedDogs.Clear();
 
@@ -127,19 +142,36 @@ namespace DogWalkerApp.WinForms.Forms
 
         public void ClearForm()
         {
+            _isInitializingWalks = true;
+            dgvWalks.SelectionChanged -= DgvWalks_SelectionChanged;
+
             txtSearch.Clear();
             chkSearchAll.Checked = false;
+
             cmbWalker.SelectedIndex = -1;
             cmbClients.SelectedIndex = -1;
             cmbAvailableDogs.DataSource = null;
-            dgvSelectedDogs.DataSource = null;
-            dtpWalkDate.Value = DateTime.Now;
-            SelectedDogIds.Clear();
-            dgvWalks.ClearSelection();
+            cmbAvailableDogs.Items.Clear();
+            cmbAvailableDogs.SelectedIndex = -1;
+            cmbAvailableDogs.Text = string.Empty;
+
+
+            dtpWalkDate.Value = DateTime.Today;
+            dtpWalkTime.Value = DateTime.Today.AddHours(9);
+
             _selectedDogs.Clear();
             dgvSelectedDogs.DataSource = null;
+
+            dgvWalks.ClearSelection();
+
+            dgvWalks.SelectionChanged += DgvWalks_SelectionChanged;
+
+            _isInitializingWalks = false;
+
             UpdateButtonStates();
         }
+
+
 
         public void ShowMessage(string message)
         {
@@ -148,18 +180,25 @@ namespace DogWalkerApp.WinForms.Forms
 
         private void BtnCreate_Click(object sender, EventArgs e)
         {
+            if (SelectedWalkId == -1) return;
             if (!ValidateInput()) return;
             CreateClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void BtnUpdate_Click(object sender, EventArgs e)
         {
-            if (!ValidateInput()) return;
+            if (SelectedWalkId == -1) return;
+            
+            if (!ValidateInput(silent: false)) return;
             UpdateClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void BtnDelete_Click(object sender, EventArgs e) =>
+        private void BtnDelete_Click(object sender, EventArgs e) 
+        { 
+            if (SelectedWalkId == -1) return;
             DeleteClicked?.Invoke(this, EventArgs.Empty);
+        }
+            
 
         private void BtnSearch_Click(object sender, EventArgs e) =>
             SearchClicked?.Invoke(this, EventArgs.Empty);
@@ -168,9 +207,12 @@ namespace DogWalkerApp.WinForms.Forms
 
         private void DgvWalks_SelectionChanged(object sender, EventArgs e)
         {
+            if (_isInitializingWalks) return;
+
             WalkSelected?.Invoke(this, EventArgs.Empty);
             UpdateButtonStates();
         }
+
 
         private void cmbClients_SelectedIndexChanged(object? sender, EventArgs e)
         {
@@ -229,6 +271,12 @@ namespace DogWalkerApp.WinForms.Forms
 
         private void UpdateButtonStates()
         {
+            if (_isInitializingWalks)
+            {
+                return;
+            }
+                
+
             bool hasValidInput = ValidateInput(silent: true);
             bool selected = SelectedWalkId != -1;
 

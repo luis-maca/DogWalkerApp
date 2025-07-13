@@ -5,6 +5,7 @@ namespace DogWalkerApp.Application.Interfaces;
 public interface IWalkerService
 {
     List<WalkerDto> GetAll();
+    List<WalkerDto> GetAllActive();
     WalkerDto? GetById(int id);
     void Create(WalkerDto dto);
     void Update(WalkerDto dto);

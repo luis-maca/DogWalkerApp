@@ -22,6 +22,7 @@ public class ClientPresenter
         _view.SearchClicked += OnSearch;
 
         LoadClients();
+        _view.ClearForm();
     }
 
     private void LoadClients()
