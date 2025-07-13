@@ -34,6 +34,7 @@
             label1 = new Label();
             dgvWalks = new DataGridView();
             groupBox1 = new GroupBox();
+            dtpWalkDate = new DateTimePicker();
             numDuration = new NumericUpDown();
             label6 = new Label();
             dtpWalkTime = new DateTimePicker();
@@ -44,7 +45,6 @@
             btnClear = new Button();
             btnRemoveDogFromWalk = new Button();
             btnAddDogToWalk = new Button();
-            dtpWalkDate = new DateTimePicker();
             cmbAvailableDogs = new ComboBox();
             cmbClients = new ComboBox();
             cmbWalker = new ComboBox();
@@ -111,6 +111,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(dtpWalkDate);
             groupBox1.Controls.Add(numDuration);
             groupBox1.Controls.Add(label6);
             groupBox1.Controls.Add(dtpWalkTime);
@@ -121,7 +122,6 @@
             groupBox1.Controls.Add(btnClear);
             groupBox1.Controls.Add(btnRemoveDogFromWalk);
             groupBox1.Controls.Add(btnAddDogToWalk);
-            groupBox1.Controls.Add(dtpWalkDate);
             groupBox1.Controls.Add(cmbAvailableDogs);
             groupBox1.Controls.Add(cmbClients);
             groupBox1.Controls.Add(cmbWalker);
@@ -135,6 +135,16 @@
             groupBox1.TabIndex = 14;
             groupBox1.TabStop = false;
             groupBox1.Text = "Create or Update a Dog Walk Record";
+            // 
+            // dtpWalkDate
+            // 
+            dtpWalkDate.AllowDrop = true;
+            dtpWalkDate.Format = DateTimePickerFormat.Short;
+            dtpWalkDate.Location = new Point(171, 99);
+            dtpWalkDate.Name = "dtpWalkDate";
+            dtpWalkDate.Size = new Size(237, 27);
+            dtpWalkDate.TabIndex = 27;
+            dtpWalkDate.Value = new DateTime(2025, 7, 13, 0, 0, 0, 0);
             // 
             // numDuration
             // 
@@ -160,7 +170,7 @@
             // 
             dtpWalkTime.CustomFormat = "HH:mm";
             dtpWalkTime.Format = DateTimePickerFormat.Time;
-            dtpWalkTime.Location = new Point(357, 99);
+            dtpWalkTime.Location = new Point(434, 99);
             dtpWalkTime.Name = "dtpWalkTime";
             dtpWalkTime.ShowUpDown = true;
             dtpWalkTime.Size = new Size(83, 27);
@@ -240,21 +250,12 @@
             btnAddDogToWalk.UseVisualStyleBackColor = true;
             btnAddDogToWalk.Click += btnAddDogToWalk_Click;
             // 
-            // dtpWalkDate
-            // 
-            dtpWalkDate.CustomFormat = "yyyy-MM-dd";
-            dtpWalkDate.Format = DateTimePickerFormat.Custom;
-            dtpWalkDate.Location = new Point(171, 99);
-            dtpWalkDate.Name = "dtpWalkDate";
-            dtpWalkDate.Size = new Size(152, 27);
-            dtpWalkDate.TabIndex = 7;
-            // 
             // cmbAvailableDogs
             // 
             cmbAvailableDogs.FormattingEnabled = true;
             cmbAvailableDogs.Location = new Point(171, 233);
             cmbAvailableDogs.Name = "cmbAvailableDogs";
-            cmbAvailableDogs.Size = new Size(334, 28);
+            cmbAvailableDogs.Size = new Size(346, 28);
             cmbAvailableDogs.TabIndex = 6;
             // 
             // cmbClients
@@ -262,7 +263,7 @@
             cmbClients.FormattingEnabled = true;
             cmbClients.Location = new Point(171, 185);
             cmbClients.Name = "cmbClients";
-            cmbClients.Size = new Size(334, 28);
+            cmbClients.Size = new Size(346, 28);
             cmbClients.TabIndex = 5;
             cmbClients.SelectedIndexChanged += cmbClients_SelectedIndexChanged;
             // 
@@ -271,7 +272,7 @@
             cmbWalker.FormattingEnabled = true;
             cmbWalker.Location = new Point(171, 51);
             cmbWalker.Name = "cmbWalker";
-            cmbWalker.Size = new Size(334, 28);
+            cmbWalker.Size = new Size(346, 28);
             cmbWalker.TabIndex = 4;
             // 
             // label5
@@ -347,7 +348,6 @@
         private ComboBox cmbAvailableDogs;
         private ComboBox cmbClients;
         private ComboBox cmbWalker;
-        private DateTimePicker dtpWalkDate;
         private Button btnRemoveDogFromWalk;
         private Button btnAddDogToWalk;
         private Button btnClear;
@@ -358,5 +358,6 @@
         private DateTimePicker dtpWalkTime;
         private Label label6;
         private NumericUpDown numDuration;
+        private DateTimePicker dtpWalkDate;
     }
 }

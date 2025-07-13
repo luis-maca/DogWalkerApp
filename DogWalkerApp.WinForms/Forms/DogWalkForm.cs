@@ -46,9 +46,7 @@ namespace DogWalkerApp.WinForms.Forms
         {
             InitializeComponent();
 
-            dtpWalkDate.Format = DateTimePickerFormat.Custom;
-            dtpWalkDate.CustomFormat = "yyyy-MM-dd HH:mm";
-            dtpWalkDate.ShowUpDown = true;
+            dtpWalkDate.ShowUpDown = false;
 
             dgvWalks.SelectionChanged += DgvWalks_SelectionChanged;
             cmbClients.SelectedIndexChanged += cmbClients_SelectedIndexChanged;
@@ -129,8 +127,8 @@ namespace DogWalkerApp.WinForms.Forms
         {
             txtSearch.Clear();
             chkSearchAll.Checked = false;
-            cmbWalker.SelectedIndex = -1;
-            cmbClients.SelectedIndex = -1;
+            /*cmbWalker.SelectedIndex = -1;
+            cmbClients.SelectedIndex = -1;*/
             cmbAvailableDogs.DataSource = null;
             dgvSelectedDogs.DataSource = null;
             dtpWalkDate.Value = DateTime.Now;

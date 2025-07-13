@@ -40,11 +40,14 @@ namespace DogWalkerApp.WinForms.Presenters
             var walkers = _walkerService.GetAll();
             _view.LoadWalkers(walkers);
 
-            var clients = _clientService.GetAll();
+            var clients = _clientService.GetAll()
+                .Where(c => c.HasActiveSubscription && c.DogCount > 0)
+                .ToList();
             _view.LoadClients(clients);
 
             LoadWalks();
         }
+
 
         private void LoadWalks()
         {
