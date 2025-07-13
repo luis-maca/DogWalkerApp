@@ -6,6 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyTitle>DogWalkerApp</AssemblyTitle>
+    <Company>Luis Enrique Martínez</Company>
+    <Product>DogWalkerApp</Product>
+    <Description>Dog Walker Management App for ECI Code Challenge</Description>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

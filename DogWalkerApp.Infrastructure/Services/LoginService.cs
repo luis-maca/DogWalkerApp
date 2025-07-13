@@ -19,7 +19,8 @@ namespace DogWalkerApp.Infrastructure.Services
 
         public bool ValidateCredentials(string username, string password)
         {
-            return _context.Users.Any(u => u.Username == username && u.Password == password && u.IsActive);
+            username = username.Trim().ToLower();
+            return _context.Users.Any(u => u.Username.ToLower() == username && u.Password == password && u.IsActive);
         }
     }
 

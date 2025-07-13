@@ -148,24 +148,42 @@ namespace DogWalkerApp.Infrastructure.Services
 
         public void Update(DogWalkDto dto)
         {
-            // Load existing walk and remove all related dogs
-            var walk = _context.DogWalks.Include(w => w.Dogs).FirstOrDefault(w => w.Id == dto.Id);
-            if (walk == null) return;
+            var walk = _context.DogWalks
+                .Include(w => w.Dogs)
+                .FirstOrDefault(w => w.Id == dto.Id);
+
+            if (walk == null)
+                throw new Exception("Walk not found.");
+
+            if (dto.DogIds == null || !dto.DogIds.Any())
+                throw new Exception("At least one dog must be selected.");
+
+            var walkStart = dto.WalkDate;
+            var duration = dto.DurationMinutes;
+            var walkEnd = walkStart.AddMinutes(duration);
+
+            walk.WalkerId = dto.WalkerId;
+            walk.WalkDate = walkStart;
+            walk.DurationMinutes = duration;
 
             _context.DogWalkDogs.RemoveRange(walk.Dogs);
-            _context.SaveChanges();
 
-            // Reuse creation logic to recreate the walk
-            var tempDto = new DogWalkDto
+            foreach (var dogId in dto.DogIds)
             {
-                WalkerId = dto.WalkerId,
-                WalkDate = dto.WalkDate,
-                DogIds = dto.DogIds
-            };
+                var dogExists = _context.Dogs.Any(d => d.Id == dogId);
+                if (!dogExists)
+                    throw new Exception("Invalid dog selection.");
 
-            Delete(dto.Id);
-            Create(tempDto);
+                _context.DogWalkDogs.Add(new DogWalkDog
+                {
+                    DogWalkId = walk.Id,
+                    DogId = dogId
+                });
+            }
+
+            _context.SaveChanges();
         }
+
 
         public void Delete(int id)
         {

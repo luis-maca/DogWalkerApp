@@ -165,7 +165,7 @@
             // 
             // numAmount
             // 
-            numAmount.Location = new Point(219, 161);
+            numAmount.Location = new Point(218, 120);
             numAmount.Name = "numAmount";
             numAmount.Size = new Size(295, 27);
             numAmount.TabIndex = 7;
@@ -174,7 +174,7 @@
             // cmbMethod
             // 
             cmbMethod.FormattingEnabled = true;
-            cmbMethod.Location = new Point(219, 119);
+            cmbMethod.Location = new Point(218, 163);
             cmbMethod.Name = "cmbMethod";
             cmbMethod.Size = new Size(295, 28);
             cmbMethod.TabIndex = 6;
@@ -199,7 +199,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(22, 168);
+            label5.Location = new Point(21, 127);
             label5.Name = "label5";
             label5.Size = new Size(125, 20);
             label5.TabIndex = 3;
@@ -208,7 +208,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(22, 127);
+            label4.Location = new Point(21, 171);
             label4.Name = "label4";
             label4.Size = new Size(124, 20);
             label4.TabIndex = 2;

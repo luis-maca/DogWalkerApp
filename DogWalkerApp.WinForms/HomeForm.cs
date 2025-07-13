@@ -45,6 +45,7 @@ namespace DogWalkerApp.WinForms
                 {
                     Dog = dog,
                     Owner = walk.ClientNames.ElementAtOrDefault(index) ?? "Unknown",
+                    Walker = walk.WalkerName,
                     Time = walk.WalkDate.ToShortTimeString()
                 }))
                 .ToList();

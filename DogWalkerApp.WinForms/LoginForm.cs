@@ -13,10 +13,15 @@ namespace DogWalkerApp.WinForms
         public LoginForm(ILoginService loginService, DogWalkerDbContext context)
         {
             InitializeComponent();
+            this.MaximizeBox = false;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             this.AcceptButton = btnLogin;
             _loginService = loginService;
             _context = context;
 
+            this.FormClosing += LoginForm_FormClosing;
             btnLogin.Click += BtnLogin_Click;
             btnCancel.Click += (_, _) => System.Windows.Forms.Application.Exit();
         }
@@ -30,7 +35,7 @@ namespace DogWalkerApp.WinForms
             {
                 Hide();
                 var dogWalkService = new DogWalkService(_context);
-                var main = new MainMenuForm(_context, dogWalkService);
+                var main = new MainMenuForm(_context);
                 main.FormClosed += (_, _) => Close();
                 main.Show();
             }
@@ -39,5 +44,14 @@ namespace DogWalkerApp.WinForms
                 MessageBox.Show("Invalid username or password.", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                System.Windows.Forms.Application.Exit();
+            }
+        }
+
     }
 }

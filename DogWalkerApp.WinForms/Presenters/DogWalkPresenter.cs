@@ -37,7 +37,7 @@ namespace DogWalkerApp.WinForms.Presenters
 
         private void LoadInitialData()
         {
-            var walkers = _walkerService.GetAll();
+            var walkers = _walkerService.GetAllActive();
             _view.LoadWalkers(walkers);
 
             var clients = _clientService.GetAll()

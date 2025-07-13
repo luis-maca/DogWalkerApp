@@ -105,11 +105,12 @@ namespace DogWalkerApp.WinForms.Forms
         public void SetFields(SubscriptionDto dto)
         {
             cmbClients.SelectedValue = dto.ClientId;
-            cmbFrequency.SelectedItem = dto.Frequency;
+            cmbFrequency.SelectedValue = dto.Frequency;
             numMaxDogs.Value = dto.MaxDogsAllowed;
             chkIsActive.Checked = dto.IsActive;
             UpdateButtonStates();
         }
+
 
         public void ClearForm()
         {

@@ -41,6 +41,7 @@ namespace DogWalkerApp.WinForms.Forms
         private bool _isInitializingWalks = false;
 
 
+
         public DogWalkForm()
         {
             InitializeComponent();
@@ -119,7 +120,9 @@ namespace DogWalkerApp.WinForms.Forms
         public void SetFields(DogWalkDto dto)
         {
             cmbWalker.SelectedValue = dto.WalkerId;
-            dtpWalkDate.Value = dto.WalkDate;
+
+            dtpWalkDate.Value = dto.WalkDate.Date;
+            dtpWalkTime.Value = DateTime.Today.Date + dto.WalkDate.TimeOfDay;
 
             _selectedDogs.Clear();
 
@@ -139,6 +142,7 @@ namespace DogWalkerApp.WinForms.Forms
 
         public void ClearForm()
         {
+            _isInitializingWalks = true;
             dgvWalks.SelectionChanged -= DgvWalks_SelectionChanged;
 
             txtSearch.Clear();
@@ -162,6 +166,8 @@ namespace DogWalkerApp.WinForms.Forms
 
             dgvWalks.SelectionChanged += DgvWalks_SelectionChanged;
 
+            _isInitializingWalks = false;
+
             UpdateButtonStates();
         }
 
@@ -174,18 +180,25 @@ namespace DogWalkerApp.WinForms.Forms
 
         private void BtnCreate_Click(object sender, EventArgs e)
         {
+            if (SelectedWalkId == -1) return;
             if (!ValidateInput()) return;
             CreateClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void BtnUpdate_Click(object sender, EventArgs e)
         {
-            if (!ValidateInput()) return;
+            if (SelectedWalkId == -1) return;
+            
+            if (!ValidateInput(silent: false)) return;
             UpdateClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void BtnDelete_Click(object sender, EventArgs e) =>
+        private void BtnDelete_Click(object sender, EventArgs e) 
+        { 
+            if (SelectedWalkId == -1) return;
             DeleteClicked?.Invoke(this, EventArgs.Empty);
+        }
+            
 
         private void BtnSearch_Click(object sender, EventArgs e) =>
             SearchClicked?.Invoke(this, EventArgs.Empty);
@@ -258,6 +271,12 @@ namespace DogWalkerApp.WinForms.Forms
 
         private void UpdateButtonStates()
         {
+            if (_isInitializingWalks)
+            {
+                return;
+            }
+                
+
             bool hasValidInput = ValidateInput(silent: true);
             bool selected = SelectedWalkId != -1;
 

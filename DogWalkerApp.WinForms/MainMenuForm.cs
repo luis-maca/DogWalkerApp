@@ -5,6 +5,7 @@ using DogWalkerApp.WinForms.Forms;
 using DogWalkerApp.WinForms.Presenters;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace DogWalkerApp.WinForms
@@ -12,17 +13,16 @@ namespace DogWalkerApp.WinForms
     public partial class MainMenuForm : Form
     {
         private readonly DogWalkerDbContext _context;
-        private readonly IDogWalkService _dogWalkService;
 
-        public MainMenuForm(DogWalkerDbContext context, IDogWalkService dogWalkService)
+        public MainMenuForm(DogWalkerDbContext context)
         {
             _context = context;
-            _dogWalkService = dogWalkService;
 
             InitializeComponent();            
             InitializeMenu();
             var form = new HomeForm(_context, new DogWalkService(_context));
             OpenChildForm(form, "Home");
+
         }
 
         private void InitializeMenu()
@@ -93,6 +93,28 @@ namespace DogWalkerApp.WinForms
                 OpenChildForm(form, "Dog Walks");
             };
 
+            var exitMenuItem = new ToolStripMenuItem("Exit");
+            exitMenuItem.Alignment = ToolStripItemAlignment.Right;
+            exitMenuItem.ForeColor = Color.Red;
+            exitMenuItem.Font = new Font(exitMenuItem.Font, FontStyle.Bold);
+            exitMenuItem.Click += (s, e) =>
+            {
+                var result = MessageBox.Show(
+                    "Are you sure you want to log out and return to the login screen?",
+                    "Confirm Exit",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.Yes)
+                {
+                    this.Hide();
+                    var loginForm = new LoginForm(new LoginService(_context), _context);
+                    loginForm.Show();
+                }
+            };
+
+
             mainMenuStrip.Items.Add(homeMenuItem);
             mainMenuStrip.Items.Add(clientsMenuItem);
             mainMenuStrip.Items.Add(subscriptionsMenuItem);
@@ -100,6 +122,7 @@ namespace DogWalkerApp.WinForms
             mainMenuStrip.Items.Add(walkersMenuItem);
             mainMenuStrip.Items.Add(dogsMenuItem);
             mainMenuStrip.Items.Add(dogWalksMenuItem);
+            mainMenuStrip.Items.Add(exitMenuItem);
 
         }
 
@@ -128,6 +151,7 @@ namespace DogWalkerApp.WinForms
             var form = new HomeForm(_context, new DogWalkService(_context));
             OpenChildForm(form, "Home");
         }
+
     }
 
 }

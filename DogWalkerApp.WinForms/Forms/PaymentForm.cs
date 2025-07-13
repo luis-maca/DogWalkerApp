@@ -119,7 +119,7 @@ namespace DogWalkerApp.WinForms.Forms
             cmbSubscriptions.SelectedValue = dto.SubscriptionId;
             dtpDate.Value = dto.Date;
             numAmount.Value = dto.Amount;
-            cmbMethod.SelectedItem = dto.Method;
+            cmbMethod.SelectedValue = dto.Method;
             UpdateButtonStates();
         }
 

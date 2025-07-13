@@ -77,13 +77,13 @@
             dgvTodayDogs.Name = "dgvTodayDogs";
             dgvTodayDogs.ReadOnly = true;
             dgvTodayDogs.RowHeadersWidth = 51;
-            dgvTodayDogs.Size = new Size(439, 122);
+            dgvTodayDogs.Size = new Size(513, 211);
             dgvTodayDogs.TabIndex = 3;
             // 
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.MenuImage;
-            pictureBox1.Location = new Point(567, 62);
+            pictureBox1.Location = new Point(593, 39);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(253, 232);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
