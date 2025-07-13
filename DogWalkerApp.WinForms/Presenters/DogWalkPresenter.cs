@@ -72,7 +72,7 @@ namespace DogWalkerApp.WinForms.Presenters
 
                 _service.Create(dto);
                 _view.ShowMessage("Dog walk created successfully.");
-                LoadWalks();
+                LoadInitialData();
                 _view.ClearForm();
             }
             catch (Exception ex)

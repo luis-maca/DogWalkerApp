@@ -197,16 +197,18 @@ namespace DogWalkerApp.WinForms.Forms
         {
             if (dgvSelectedDogs.SelectedRows.Count == 0) return;
 
-            int dogId = Convert.ToInt32(dgvSelectedDogs.SelectedRows[0].Cells["DogId"].Value);
-            var dogToRemove = _selectedDogs.FirstOrDefault(d => d.Id == dogId);
-
-            if (dogToRemove != null)
-                _selectedDogs.Remove(dogToRemove);
-
-            RefreshSelectedDogsGrid();
-            UpdateButtonStates();
+            // Get the DogId from the selected row
+            if (int.TryParse(dgvSelectedDogs.SelectedRows[0].Cells["DogId"].Value?.ToString(), out int dogId))
+            {
+                var dogToRemove = _selectedDogs.FirstOrDefault(d => d.Id == dogId);
+                if (dogToRemove != null)
+                {
+                    _selectedDogs.Remove(dogToRemove);
+                    RefreshSelectedDogsGrid();
+                    UpdateButtonStates();
+                }
+            }
         }
-
 
         private bool ValidateInput(bool silent = false)
         {
