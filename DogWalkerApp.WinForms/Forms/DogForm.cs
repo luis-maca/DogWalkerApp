@@ -26,6 +26,7 @@ namespace DogWalkerApp.WinForms.Forms
 
         public string SearchTerm => txtSearch.Text.Trim();
         public bool SearchAllChecked => chkSearchAll.Checked;
+        private bool _isInitializingDogs;
 
         public event EventHandler CreateClicked;
         public event EventHandler UpdateClicked;
@@ -38,69 +39,13 @@ namespace DogWalkerApp.WinForms.Forms
         public DogForm()
         {
             InitializeComponent();
-            InitializeGrid();
             LoadBreedDropdown();
 
             btnCreate.Enabled = false;
             btnUpdate.Enabled = false;
             btnDelete.Enabled = false;
         }
-
-        private void InitializeGrid()
-        {
-            dgvDogs.Columns.Clear();
-
-            dgvDogs.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Id",
-                HeaderText = "ID",
-                DataPropertyName = "Id",
-                Visible = false
-            });
-
-            dgvDogs.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ClientName",
-                HeaderText = "Client",
-                DataPropertyName = "ClientName"
-            });
-
-            dgvDogs.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Name",
-                HeaderText = "Dog Name",
-                DataPropertyName = "Name"
-            });
-
-            dgvDogs.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Breed",
-                HeaderText = "Breed",
-                DataPropertyName = "Breed"
-            });
-
-            dgvDogs.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Age",
-                HeaderText = "Age",
-                DataPropertyName = "Age"
-            });
-
-            dgvDogs.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Notes",
-                HeaderText = "Special Care Notes",
-                DataPropertyName = "Notes"
-            });
-
-            dgvDogs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvDogs.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvDogs.MultiSelect = false;
-            dgvDogs.ReadOnly = true;
-
-            dgvDogs.SelectionChanged += DgvDogs_SelectionChanged;
-        }
-
+       
         private void LoadBreedDropdown()
         {
             var breeds = Enum.GetValues(typeof(DogBreed))
@@ -116,10 +61,14 @@ namespace DogWalkerApp.WinForms.Forms
             cmbBreed.DisplayMember = "Display";
             cmbBreed.ValueMember = "Value";
         }
-
+        
 
         public void LoadDogs(IEnumerable<DogDto> dogs)
         {
+            _isInitializingDogs = true;
+
+            dgvDogs.SelectionChanged -= DgvDogs_SelectionChanged;
+
             var displayList = dogs.Select(d => new
             {
                 d.Id,
@@ -131,10 +80,22 @@ namespace DogWalkerApp.WinForms.Forms
             }).ToList();
 
             dgvDogs.DataSource = null;
+            dgvDogs.Columns.Clear();
             dgvDogs.DataSource = displayList;
+
+            dgvDogs.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvDogs.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvDogs.MultiSelect = false;
+            dgvDogs.ReadOnly = true;
+
+            dgvDogs.ClearSelection();
+            dgvDogs.CurrentCell = null;
+
+            dgvDogs.SelectionChanged += DgvDogs_SelectionChanged;
+            _isInitializingDogs = false;
+
+            ClearForm();
         }
-
-
 
         public void LoadClients(IEnumerable<ClientDto> clients)
         {
@@ -222,6 +183,7 @@ namespace DogWalkerApp.WinForms.Forms
 
         private void DgvDogs_SelectionChanged(object sender, EventArgs e)
         {
+            if (_isInitializingDogs) return;
             DogSelected?.Invoke(this, EventArgs.Empty);
             UpdateButtonStates();
         }

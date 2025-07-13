@@ -107,7 +107,6 @@
             dgvWalks.RowHeadersWidth = 51;
             dgvWalks.Size = new Size(775, 190);
             dgvWalks.TabIndex = 13;
-            dgvWalks.SelectionChanged += DgvWalks_SelectionChanged;
             // 
             // groupBox1
             // 

@@ -37,10 +37,11 @@ namespace DogWalkerApp.WinForms
         public event EventHandler SearchClicked;
         public event EventHandler ClientSelected;
 
+        private bool _isInitializingClients;
+
         public ClientForm(DogWalkerDbContext context)
         {
             InitializeComponent();
-            InitializeGrid();
 
             //By Default, disable buttons until a client is selected
             btnCreate.Enabled = false;
@@ -49,50 +50,40 @@ namespace DogWalkerApp.WinForms
 
             _context = context;
             _service = new ClientService(_context);
+            ClearForm();
         }
 
-        private void InitializeGrid()
+        public void LoadClients(IEnumerable<ClientDto> clients)
         {
+            _isInitializingClients = true;
+
+            dgvClients.SelectionChanged -= DgvClients_SelectionChanged;
+
+            var display = clients.Select(c => new
+            {
+                c.Id,
+                c.Name,
+                c.PhoneNumber,
+                c.Address
+            }).ToList();
+
+            dgvClients.DataSource = null;
             dgvClients.Columns.Clear();
-
-            dgvClients.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Id",
-                HeaderText = "ID",
-                DataPropertyName = "Id",
-                Visible = false
-            });
-
-            dgvClients.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Name",
-                HeaderText = "Name",
-                DataPropertyName = "Name"
-            });
-
-            dgvClients.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "PhoneNumber",
-                HeaderText = "Phone",
-                DataPropertyName = "PhoneNumber"
-            });
-
-            dgvClients.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Address",
-                HeaderText = "Address",
-                DataPropertyName = "Address"
-            });
+            dgvClients.DataSource = display;
 
             dgvClients.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvClients.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvClients.MultiSelect = false;
             dgvClients.ReadOnly = true;
-        }
 
-        public void LoadClients(IEnumerable<ClientDto> clients)
-        {
-            dgvClients.DataSource = clients.ToList();
+            dgvClients.ClearSelection();
+            dgvClients.CurrentCell = null;
+
+            _isInitializingClients = false;
+
+            dgvClients.SelectionChanged += DgvClients_SelectionChanged;
+
+            ClearForm();
         }
 
         public void SetClientFields(ClientDto dto)
@@ -106,10 +97,19 @@ namespace DogWalkerApp.WinForms
 
         public void ClearForm()
         {
+            dgvClients.SelectionChanged -= DgvClients_SelectionChanged;
+
             txtName.Clear();
             txtPhone.Clear();
             txtAddress.Clear();
+            txtSearch.Clear();
+            chkSearchAll.Checked = false;
+
             dgvClients.ClearSelection();
+            dgvClients.CurrentCell = null;
+
+            dgvClients.SelectionChanged += DgvClients_SelectionChanged;
+
             UpdateButtonStates();
         }
 
@@ -117,6 +117,7 @@ namespace DogWalkerApp.WinForms
         {
             MessageBox.Show(message);
         }
+
         #region Event Handlers
         private void BtnCreate_Click(object sender, EventArgs e)
         {
@@ -166,9 +167,12 @@ namespace DogWalkerApp.WinForms
 
         private void DgvClients_SelectionChanged(object sender, EventArgs e)
         {
+            if (_isInitializingClients) return;
+
             ClientSelected?.Invoke(this, EventArgs.Empty);
             UpdateButtonStates();
         }
+
 
         private void BtnClear_Click(object sender, EventArgs e)
         {

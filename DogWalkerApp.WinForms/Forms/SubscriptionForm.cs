@@ -28,6 +28,7 @@ namespace DogWalkerApp.WinForms.Forms
 
         public string SearchTerm => txtSearch.Text.Trim();
         public bool SearchAllChecked => chkSearchAll.Checked;
+        private bool _isInitializingSubscriptions;
 
 
         public event EventHandler CreateClicked;
@@ -39,68 +40,43 @@ namespace DogWalkerApp.WinForms.Forms
         public SubscriptionForm()
         {
             InitializeComponent();
-            InitializeGrid();
             LoadFrequencyDropdown();
         }
 
-        private void InitializeGrid()
+      
+        public void LoadSubscriptions(IEnumerable<SubscriptionDto> items)
         {
+            _isInitializingSubscriptions = true;
+
+            dgvSubscriptions.SelectionChanged -= DgvSubscriptions_SelectionChanged;
+
+            var display = items.Select(s => new
+            {
+                s.Id,
+                s.ClientName,
+                Frequency = s.Frequency.ToString(),
+                s.MaxDogsAllowed,
+                s.IsActive
+            }).ToList();
+
+            dgvSubscriptions.DataSource = null;
             dgvSubscriptions.Columns.Clear();
-
-            dgvSubscriptions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Id",
-                HeaderText = "ID",
-                DataPropertyName = "Id",
-                Visible = false
-            });
-
-            dgvSubscriptions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ClientName",
-                HeaderText = "Client",
-                DataPropertyName = "ClientName"
-            });
-
-            dgvSubscriptions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Frequency",
-                HeaderText = "Frequency",
-                DataPropertyName = "Frequency"
-            });
-
-            dgvSubscriptions.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "MaxDogsAllowed",
-                HeaderText = "Max Dogs",
-                DataPropertyName = "MaxDogsAllowed"
-            });
-
-            dgvSubscriptions.Columns.Add(new DataGridViewCheckBoxColumn
-            {
-                Name = "IsActive",
-                HeaderText = "Active",
-                DataPropertyName = "IsActive"
-            });
+            dgvSubscriptions.DataSource = display;
 
             dgvSubscriptions.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvSubscriptions.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvSubscriptions.MultiSelect = false;
             dgvSubscriptions.ReadOnly = true;
 
+            dgvSubscriptions.ClearSelection();
+            dgvSubscriptions.CurrentCell = null;
+
             dgvSubscriptions.SelectionChanged += DgvSubscriptions_SelectionChanged;
+            _isInitializingSubscriptions = false;
+
+            ClearForm();
         }
 
-        private void DgvSubscriptions_SelectionChanged(object sender, EventArgs e)
-        {
-            SubscriptionSelected?.Invoke(this, EventArgs.Empty);
-            UpdateButtonStates();
-        }
-
-        public void LoadSubscriptions(IEnumerable<SubscriptionDto> items)
-        {
-            dgvSubscriptions.DataSource = items.ToList();
-        }
 
         public void LoadClients(IEnumerable<ClientDto> clients)
         {
@@ -177,6 +153,14 @@ namespace DogWalkerApp.WinForms.Forms
         private void CmbFrequency_SelectedIndexChanged(object sender, EventArgs e) => UpdateButtonStates();
         private void NumMaxDogs_ValueChanged(object sender, EventArgs e) => UpdateButtonStates();
         private void ChkIsActive_CheckedChanged(object sender, EventArgs e) => UpdateButtonStates();
+
+        private void DgvSubscriptions_SelectionChanged(object sender, EventArgs e)
+        {
+            if(_isInitializingSubscriptions) return;
+
+            SubscriptionSelected?.Invoke(this, EventArgs.Empty);
+            UpdateButtonStates();
+        }
 
         #endregion
 

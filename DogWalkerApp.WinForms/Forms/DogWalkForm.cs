@@ -61,6 +61,8 @@ namespace DogWalkerApp.WinForms.Forms
 
             cmbWalker.SelectedIndexChanged += (_, _) => UpdateButtonStates();
             cmbAvailableDogs.SelectedIndexChanged += (_, _) => UpdateButtonStates();
+
+            ClearForm();
         }
 
         public void LoadDogWalks(IEnumerable<DogWalkDto> walks)
@@ -83,12 +85,12 @@ namespace DogWalkerApp.WinForms.Forms
             dgvWalks.DataSource = display;
 
             dgvWalks.ClearSelection();
+            dgvWalks.CurrentCell = null;
 
             dgvWalks.SelectionChanged += DgvWalks_SelectionChanged;
-
             _isInitializingWalks = false;
+            ClearForm();
         }
-
 
 
         public void LoadWalkers(IEnumerable<WalkerDto> walkers)
@@ -145,6 +147,10 @@ namespace DogWalkerApp.WinForms.Forms
             cmbWalker.SelectedIndex = -1;
             cmbClients.SelectedIndex = -1;
             cmbAvailableDogs.DataSource = null;
+            cmbAvailableDogs.Items.Clear();
+            cmbAvailableDogs.SelectedIndex = -1;
+            cmbAvailableDogs.Text = string.Empty;
+
 
             dtpWalkDate.Value = DateTime.Today;
             dtpWalkTime.Value = DateTime.Today.AddHours(9);

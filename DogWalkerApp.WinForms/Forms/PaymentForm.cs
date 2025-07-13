@@ -24,6 +24,8 @@ namespace DogWalkerApp.WinForms.Forms
         public string SearchTerm => txtSearch.Text.Trim();
         public bool SearchAllChecked => chkSearchAll.Checked;
 
+        private bool _isInitializingPayments;
+
         public event EventHandler CreateClicked;
         public event EventHandler UpdateClicked;
         public event EventHandler DeleteClicked;
@@ -33,7 +35,6 @@ namespace DogWalkerApp.WinForms.Forms
         public PaymentForm()
         {
             InitializeComponent();
-            InitializeGrid();
             LoadPaymentMethodDropdown();
 
 
@@ -54,56 +55,6 @@ namespace DogWalkerApp.WinForms.Forms
         }
 
 
-        private void InitializeGrid()
-        {
-            dgvPayments.Columns.Clear();
-
-            dgvPayments.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Id",
-                HeaderText = "ID",
-                DataPropertyName = "Id",
-                Visible = false
-            });
-
-            dgvPayments.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Client",
-                HeaderText = "Client",
-                DataPropertyName = "Client"
-            });
-
-            dgvPayments.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Date",
-                HeaderText = "Date",
-                DataPropertyName = "Date",
-                DefaultCellStyle = new DataGridViewCellStyle { Format = "yyyy-MM-dd" }
-            });
-
-            dgvPayments.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Amount",
-                HeaderText = "Amount",
-                DataPropertyName = "Amount"
-            });
-
-            dgvPayments.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Method",
-                HeaderText = "Method",
-                DataPropertyName = "Method"
-            });
-
-
-            dgvPayments.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvPayments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPayments.MultiSelect = false;
-            dgvPayments.ReadOnly = true;
-
-            dgvPayments.SelectionChanged += DgvPayments_SelectionChanged;
-        }
-
         private void LoadPaymentMethodDropdown()
         {
             var methods = Enum.GetValues(typeof(PaymentMethod))
@@ -118,10 +69,14 @@ namespace DogWalkerApp.WinForms.Forms
             cmbMethod.DataSource = methods;
             cmbMethod.DisplayMember = "Display";
             cmbMethod.ValueMember = "Value";
-        }
+        }        
 
         public void LoadPayments(IEnumerable<PaymentDto> items)
         {
+            _isInitializingPayments = true;
+
+            dgvPayments.SelectionChanged -= DgvPayments_SelectionChanged;
+
             var displayList = items.Select(p => new
             {
                 p.Id,
@@ -131,10 +86,23 @@ namespace DogWalkerApp.WinForms.Forms
                 Method = EnumHelper.GetDescription(p.Method)
             }).ToList();
 
+            dgvPayments.DataSource = null;
+            dgvPayments.Columns.Clear();
             dgvPayments.DataSource = displayList;
+
+            dgvPayments.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvPayments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvPayments.MultiSelect = false;
+            dgvPayments.ReadOnly = true;
+
+            dgvPayments.ClearSelection();
+            dgvPayments.CurrentCell = null;
+
+            dgvPayments.SelectionChanged += DgvPayments_SelectionChanged;
+            _isInitializingPayments = false;
+
+            ClearForm();
         }
-
-
 
 
         public void LoadSubscriptions(IEnumerable<SubscriptionDto> items)
@@ -220,6 +188,7 @@ namespace DogWalkerApp.WinForms.Forms
 
         private void DgvPayments_SelectionChanged(object sender, EventArgs e)
         {
+            if (_isInitializingPayments) return;
             PaymentSelected?.Invoke(this, EventArgs.Empty);
             UpdateButtonStates();
         }
