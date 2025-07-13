@@ -103,19 +103,25 @@ namespace DogWalkerApp.WinForms
 
         }
 
+        private Form _activeForm;
+
         private void OpenChildForm(Form childForm, string title)
         {
-            panelContent.Controls.Clear();
+            if (_activeForm != null)
+                _activeForm.Close();
 
-            childForm.TopLevel = false;
-            childForm.FormBorderStyle = FormBorderStyle.None;
-            childForm.Dock = DockStyle.Fill;
+            _activeForm = childForm;
+            _activeForm.TopLevel = false;
+            _activeForm.FormBorderStyle = FormBorderStyle.None;
+            _activeForm.Dock = DockStyle.Fill;
 
-            panelContent.Controls.Add(childForm);
-            childForm.Show();
-
+            this.Controls.Add(_activeForm);
+            this.Tag = _activeForm;
+            _activeForm.BringToFront();
+            _activeForm.Show();
             this.Text = $"Dog Walker App - {title}";
         }
+
 
         private void MainMenuForm_Load(object sender, EventArgs e)
         {
