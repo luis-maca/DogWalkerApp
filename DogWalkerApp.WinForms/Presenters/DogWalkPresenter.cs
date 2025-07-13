@@ -10,58 +10,66 @@ namespace DogWalkerApp.WinForms.Presenters
         private readonly IDogWalkService _service;
         private readonly IDogService _dogService;
         private readonly IWalkerService _walkerService;
+        private readonly IClientService _clientService;
 
         public DogWalkPresenter(
             IDogWalkView view,
             IDogWalkService service,
             IDogService dogService,
-            IWalkerService walkerService)
+            IWalkerService walkerService,
+            IClientService clientService)
         {
             _view = view;
             _service = service;
             _dogService = dogService;
             _walkerService = walkerService;
+            _clientService = clientService;
 
             _view.CreateClicked += OnCreate;
             _view.UpdateClicked += OnUpdate;
             _view.DeleteClicked += OnDelete;
             _view.SearchClicked += OnSearch;
             _view.WalkSelected += OnSelected;
+            _view.ClientChanged += OnClientChanged;
 
-            LoadDogs();
-            LoadWalkers();
-            LoadWalks();
+            LoadInitialData();
         }
 
-        private void LoadDogs()
-        {
-            var dogs = _dogService.GetAll();
-            _view.LoadDogs(dogs);
-        }
-
-        private void LoadWalkers()
+        private void LoadInitialData()
         {
             var walkers = _walkerService.GetAll();
             _view.LoadWalkers(walkers);
+
+            var clients = _clientService.GetAll();
+            _view.LoadClients(clients);
+
+            LoadWalks();
         }
 
         private void LoadWalks()
         {
             var walks = _service.GetAll();
-            _view.LoadWalks(walks);
+            _view.LoadDogWalks(walks);
+        }
+
+        private void LoadDogsForClient(int clientId)
+        {
+            var dogs = _dogService.GetByClientId(clientId);
+            _view.LoadAvailableDogs(dogs);
         }
 
         private void OnCreate(object? sender, EventArgs e)
         {
-            var dto = new DogWalkDto
-            {
-                WalkDate = _view.WalkDate,
-                WalkerId = _view.SelectedWalkerId,
-                DogIds = _view.SelectedDogIds
-            };
-
             try
             {
+                var dto = new DogWalkDto
+                {
+                    WalkDate = _view.WalkDate,
+                    WalkerId = _view.SelectedWalkerId,
+                    DogIds = _view.SelectedDogIds,
+                    DurationMinutes = _view.DurationMinutes
+                };
+
                 _service.Create(dto);
                 _view.ShowMessage("Dog walk created successfully.");
                 LoadWalks();
@@ -81,16 +89,17 @@ namespace DogWalkerApp.WinForms.Presenters
                 return;
             }
 
-            var dto = new DogWalkDto
-            {
-                Id = _view.SelectedWalkId,
-                WalkDate = _view.WalkDate,
-                WalkerId = _view.SelectedWalkerId,
-                DogIds = _view.SelectedDogIds
-            };
-
             try
             {
+                var dto = new DogWalkDto
+                {
+                    Id = _view.SelectedWalkId,
+                    WalkDate = _view.WalkDate,
+                    WalkerId = _view.SelectedWalkerId,
+                    DogIds = _view.SelectedDogIds,
+                    DurationMinutes = _view.DurationMinutes
+                };
+
                 _service.Update(dto);
                 _view.ShowMessage("Dog walk updated successfully.");
                 LoadWalks();
@@ -120,7 +129,7 @@ namespace DogWalkerApp.WinForms.Presenters
                 ? _service.GetAll()
                 : _service.Search(_view.SearchTerm);
 
-            _view.LoadWalks(results);
+            _view.LoadDogWalks(results);
         }
 
         private void OnSelected(object? sender, EventArgs e)
@@ -129,5 +138,12 @@ namespace DogWalkerApp.WinForms.Presenters
             if (walk != null)
                 _view.SetFields(walk);
         }
+
+        private void OnClientChanged(object? sender, EventArgs e)
+        {
+            var clientId = _view.SelectedClientId;
+            LoadDogsForClient(clientId);
+        }
+
     }
 }

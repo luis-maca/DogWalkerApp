@@ -17,11 +17,13 @@ namespace DogWalkerApp.Infrastructure.Services
 
         public IEnumerable<DogWalkDto> GetAll()
         {
+            // Load all dog walks with related walker, dogs, and clients
             var walks = _context.DogWalks
                 .Include(w => w.Walker)
                 .Include(w => w.Dogs).ThenInclude(dw => dw.Dog).ThenInclude(d => d.Client)
                 .ToList();
 
+            // Project entities into DTOs for UI use
             return walks.Select(w => new DogWalkDto
             {
                 Id = w.Id,
@@ -47,6 +49,7 @@ namespace DogWalkerApp.Infrastructure.Services
 
             term = term.ToLower();
 
+            //Search based on client and dog names
             return GetAll()
                 .Where(w => w.ClientNames.Any(c => c.ToLower().Contains(term)) ||
                             w.DogNames.Any(d => d.ToLower().Contains(term)))
@@ -55,18 +58,20 @@ namespace DogWalkerApp.Infrastructure.Services
 
         public void Create(DogWalkDto dto)
         {
+            // Ensure at least one dog is selected
             if (dto.DogIds == null || !dto.DogIds.Any())
                 throw new Exception("At least one dog must be selected for the walk.");
 
             var walkStart = dto.WalkDate;
-            var duration = GetDefaultWalkTimeInMinutes();
+            var duration = dto.DurationMinutes;
             var walkEnd = walkStart.AddMinutes(duration);
 
+            // Validate walker exists and is available
             var walker = _context.Walkers.FirstOrDefault(w => w.Id == dto.WalkerId);
             if (walker == null || !walker.IsAvailable)
                 throw new Exception("Walker is not available.");
 
-            // Check for overlapping walks for the same walker
+            // Validate that the walker has a 30-minute break between walks
             var overlappingWalks = _context.DogWalks
                 .Where(w => w.WalkerId == dto.WalkerId && w.WalkDate.Date == dto.WalkDate.Date)
                 .ToList();
@@ -80,7 +85,7 @@ namespace DogWalkerApp.Infrastructure.Services
                     throw new Exception("Walker must have at least 30 minutes between walks.");
             }
 
-            // Check max dogs per walk
+            // Validate max number of dogs allowed per walk from AppConfiguration
             var maxDogsPerWalk = int.Parse(_context.AppConfigurations.FirstOrDefault(c => c.Key == "MaxDogsPerWalk")?.Value ?? "3");
             var countAtSameTime = _context.DogWalkDogs
                 .Include(x => x.DogWalk)
@@ -91,20 +96,16 @@ namespace DogWalkerApp.Infrastructure.Services
 
             foreach (var dogId in dto.DogIds)
             {
+                // Validate that the dog exists and has a client with active subscription
                 var dog = _context.Dogs.Include(d => d.Client).FirstOrDefault(d => d.Id == dogId)
                           ?? throw new Exception("Dog not found.");
 
                 var sub = _context.Subscriptions.FirstOrDefault(s => s.ClientId == dog.ClientId);
                 if (sub == null || !sub.IsActive)
                     throw new Exception($"Client '{dog.Client.Name}' must have an active subscription.");
+                
 
-                var walksToday = _context.DogWalkDogs
-                    .Include(wd => wd.DogWalk)
-                    .Count(wd => wd.Dog.ClientId == dog.ClientId && wd.DogWalk.WalkDate.Date == dto.WalkDate.Date);
-
-                if (walksToday >= sub.MaxDogsAllowed)
-                    throw new Exception($"Client '{dog.Client.Name}' cannot schedule more than {sub.MaxDogsAllowed} dogs per day.");
-
+                // Check that the specific dog doesn't have overlapping walks
                 var existingWalks = _context.DogWalkDogs
                     .Include(x => x.DogWalk)
                     .Where(x => x.DogId == dogId && x.DogWalk.WalkDate.Date == dto.WalkDate.Date)
@@ -121,6 +122,7 @@ namespace DogWalkerApp.Infrastructure.Services
                 }
             }
 
+            // Create the walk
             var walkEntity = new DogWalk
             {
                 WalkerId = dto.WalkerId,
@@ -131,6 +133,7 @@ namespace DogWalkerApp.Infrastructure.Services
             _context.DogWalks.Add(walkEntity);
             _context.SaveChanges();
 
+            // Associate dogs with the walk
             foreach (var dogId in dto.DogIds)
             {
                 _context.DogWalkDogs.Add(new DogWalkDog
@@ -145,14 +148,14 @@ namespace DogWalkerApp.Infrastructure.Services
 
         public void Update(DogWalkDto dto)
         {
+            // Load existing walk and remove all related dogs
             var walk = _context.DogWalks.Include(w => w.Dogs).FirstOrDefault(w => w.Id == dto.Id);
             if (walk == null) return;
 
-            // Clear old relations
             _context.DogWalkDogs.RemoveRange(walk.Dogs);
             _context.SaveChanges();
 
-            // Reuse Create logic after resetting
+            // Reuse creation logic to recreate the walk
             var tempDto = new DogWalkDto
             {
                 WalkerId = dto.WalkerId,
@@ -166,6 +169,7 @@ namespace DogWalkerApp.Infrastructure.Services
 
         public void Delete(int id)
         {
+            // Delete walk and its related dogs
             var walk = _context.DogWalks.Include(w => w.Dogs).FirstOrDefault(w => w.Id == id);
             if (walk == null) return;
 
@@ -173,11 +177,6 @@ namespace DogWalkerApp.Infrastructure.Services
             _context.DogWalks.Remove(walk);
             _context.SaveChanges();
         }
-
-        private int GetDefaultWalkTimeInMinutes()
-        {
-            var value = _context.AppConfigurations.FirstOrDefault(c => c.Key == "DefaultWalkTime")?.Value ?? "30";
-            return int.TryParse(value, out var minutes) ? minutes : 30;
-        }
     }
+
 }

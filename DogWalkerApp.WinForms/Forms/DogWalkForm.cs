@@ -15,13 +15,19 @@ namespace DogWalkerApp.WinForms.Forms
                 ? Convert.ToInt32(dgvWalks.SelectedRows[0].Cells["Id"].Value)
                 : -1;
 
-        public int SelectedWalkerId => (int)cmbWalker.SelectedValue;
-        public int SelectedClientId => (int)cmbClients.SelectedValue;
-        public int SelectedAvailableDogId => (int)cmbAvailableDogs.SelectedValue;
-        public List<int> SelectedDogIds { get; private set; } = new();
+        public int SelectedClientId =>
+            cmbClients.SelectedItem is ClientDto c ? c.Id : -1;
+
+        public int SelectedWalkerId =>
+            cmbWalker.SelectedItem is WalkerDto w ? w.Id : -1;
+
+        public int SelectedAvailableDogId =>
+            cmbAvailableDogs.SelectedItem is DogDto d ? d.Id : -1;
+        public List<int> SelectedDogIds => _selectedDogs.Select(d => d.Id).ToList();
 
 
-        public DateTime WalkStartDate => dtpWalkDate.Value;
+        public DateTime WalkDate => dtpWalkDate.Value.Date + dtpWalkTime.Value.TimeOfDay;
+        public int DurationMinutes => (int)numDuration.Value;
 
         public string SearchTerm => txtSearch.Text.Trim();
         public bool SearchAllChecked => chkSearchAll.Checked;
@@ -32,6 +38,9 @@ namespace DogWalkerApp.WinForms.Forms
         public event EventHandler SearchClicked;
         public event EventHandler WalkSelected;
         public event EventHandler ClientChanged;
+
+        private readonly List<DogDto> _selectedDogs = new();
+
 
         public DogWalkForm()
         {
@@ -63,6 +72,7 @@ namespace DogWalkerApp.WinForms.Forms
             {
                 w.Id,
                 w.WalkDate,
+                w.DurationMinutes,
                 Walker = w.WalkerName,
                 Dogs = string.Join(", ", w.DogNames),
                 Clients = string.Join(", ", w.ClientNames)
@@ -98,16 +108,22 @@ namespace DogWalkerApp.WinForms.Forms
         {
             cmbWalker.SelectedValue = dto.WalkerId;
             dtpWalkDate.Value = dto.WalkDate;
-            SelectedDogIds = dto.DogIds;
 
-            dgvSelectedDogs.DataSource = dto.DogNames.Select((name, index) => new
+            _selectedDogs.Clear();
+
+            for (int i = 0; i < dto.DogIds.Count; i++)
             {
-                DogId = dto.DogIds[index],
-                DogName = name
-            }).ToList();
+                _selectedDogs.Add(new DogDto
+                {
+                    Id = dto.DogIds[i],
+                    Name = dto.DogNames[i]
+                });
+            }
 
+            RefreshSelectedDogsGrid();
             UpdateButtonStates();
         }
+
 
         public void ClearForm()
         {
@@ -120,6 +136,8 @@ namespace DogWalkerApp.WinForms.Forms
             dtpWalkDate.Value = DateTime.Now;
             SelectedDogIds.Clear();
             dgvWalks.ClearSelection();
+            _selectedDogs.Clear();
+            dgvSelectedDogs.DataSource = null;
             UpdateButtonStates();
         }
 
@@ -162,35 +180,33 @@ namespace DogWalkerApp.WinForms.Forms
 
         private void btnAddDogToWalk_Click(object? sender, EventArgs e)
         {
-            if (cmbAvailableDogs.SelectedItem is not DogDto dog || SelectedDogIds.Contains(dog.Id))
+            if (cmbAvailableDogs.SelectedItem is not DogDto dog)
                 return;
 
-            SelectedDogIds.Add(dog.Id);
+            if (_selectedDogs.Any(d => d.Id == dog.Id))
+                return;
 
-            dgvSelectedDogs.DataSource = SelectedDogIds.Select(id => new
-            {
-                DogId = id,
-                DogName = ((List<DogDto>)cmbAvailableDogs.DataSource).First(d => d.Id == id).Name
-            }).ToList();
+            _selectedDogs.Add(dog);
 
+            RefreshSelectedDogsGrid();
             UpdateButtonStates();
         }
+
 
         private void BtnRemoveDog_Click(object? sender, EventArgs e)
         {
             if (dgvSelectedDogs.SelectedRows.Count == 0) return;
 
             int dogId = Convert.ToInt32(dgvSelectedDogs.SelectedRows[0].Cells["DogId"].Value);
-            SelectedDogIds.Remove(dogId);
+            var dogToRemove = _selectedDogs.FirstOrDefault(d => d.Id == dogId);
 
-            dgvSelectedDogs.DataSource = SelectedDogIds.Select(id => new
-            {
-                DogId = id,
-                DogName = ((List<DogDto>)cmbAvailableDogs.DataSource).First(d => d.Id == id).Name
-            }).ToList();
+            if (dogToRemove != null)
+                _selectedDogs.Remove(dogToRemove);
 
+            RefreshSelectedDogsGrid();
             UpdateButtonStates();
         }
+
 
         private bool ValidateInput(bool silent = false)
         {
@@ -218,5 +234,17 @@ namespace DogWalkerApp.WinForms.Forms
             btnUpdate.Enabled = hasValidInput && selected;
             btnDelete.Enabled = selected;
         }
+
+        private void RefreshSelectedDogsGrid()
+        {
+            dgvSelectedDogs.DataSource = _selectedDogs
+                .Select(d => new
+                {
+                    DogId = d.Id,
+                    DogName = d.Name
+                })
+                .ToList();
+        }
+
     }
 }
