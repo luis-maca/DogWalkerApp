@@ -91,10 +91,12 @@ public class PaymentService : IPaymentService
 
     public IEnumerable<PaymentDto> Search(string clientName)
     {
+        clientName = clientName.ToLower();
+
         return _context.Payments
             .Include(p => p.Subscription)
             .ThenInclude(s => s.Client)
-            .Where(p => p.Subscription.Client.Name.Contains(clientName))
+            .Where(p => p.Subscription.Client.Name.ToLower().Contains(clientName))
             .Select(p => new PaymentDto
             {
                 Id = p.Id,

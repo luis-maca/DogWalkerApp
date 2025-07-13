@@ -83,9 +83,11 @@ public class ClientService : IClientService
 
     public IEnumerable<ClientDto> Search(string term)
     {
+        term = term.ToLower();
+
         return _context.Clients
             .Where(c => !c.IsDeleted &&
-                   (c.Name.Contains(term) || c.PhoneNumber.Contains(term)))
+                (c.Name.ToLower().Contains(term) || c.PhoneNumber.Contains(term)))
             .Select(c => new ClientDto
             {
                 Id = c.Id,
@@ -95,5 +97,6 @@ public class ClientService : IClientService
             })
             .ToList();
     }
+
 
 }
