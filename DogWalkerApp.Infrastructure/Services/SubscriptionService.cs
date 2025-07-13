@@ -31,6 +31,7 @@ public class SubscriptionService : ISubscriptionService
             }).ToList();
     }
 
+
     public SubscriptionDto GetById(int id)
     {
         var s = _context.Subscriptions.Include(s => s.Client).FirstOrDefault(s => s.Id == id);
