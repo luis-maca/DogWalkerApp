@@ -12,17 +12,29 @@ namespace DogWalkerApp.WinForms
     public partial class MainMenuForm : Form
     {
         private readonly DogWalkerDbContext _context;
+        private readonly IDogWalkService _dogWalkService;
 
-        public MainMenuForm(DogWalkerDbContext context)
+        public MainMenuForm(DogWalkerDbContext context, IDogWalkService dogWalkService)
         {
-            InitializeComponent();
             _context = context;
+            _dogWalkService = dogWalkService;
 
+            InitializeComponent();            
             InitializeMenu();
+            var form = new HomeForm(_context, new DogWalkService(_context));
+            OpenChildForm(form, "Home");
         }
 
         private void InitializeMenu()
-        {   
+        {
+            //Home
+            var homeMenuItem = new ToolStripMenuItem("Home");
+            homeMenuItem.Click += (s, e) =>
+            {
+                var form = new HomeForm(_context, new DogWalkService(_context));
+                OpenChildForm(form, "Home");
+            };
+
             //Clients
             var clientsMenuItem = new ToolStripMenuItem("Clients");
             clientsMenuItem.Click += (s, e) =>
@@ -81,6 +93,7 @@ namespace DogWalkerApp.WinForms
                 OpenChildForm(form, "Dog Walks");
             };
 
+            mainMenuStrip.Items.Add(homeMenuItem);
             mainMenuStrip.Items.Add(clientsMenuItem);
             mainMenuStrip.Items.Add(subscriptionsMenuItem);
             mainMenuStrip.Items.Add(paymentsMenuItem);
@@ -101,7 +114,13 @@ namespace DogWalkerApp.WinForms
             panelContent.Controls.Add(childForm);
             childForm.Show();
 
-            this.Text = $"DogWalkerApp - {title}";
+            this.Text = $"Dog Walker App - {title}";
+        }
+
+        private void MainMenuForm_Load(object sender, EventArgs e)
+        {
+            var form = new HomeForm(_context, new DogWalkService(_context));
+            OpenChildForm(form, "Home");
         }
     }
 

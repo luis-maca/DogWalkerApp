@@ -160,7 +160,7 @@
             // 
             dtpWalkTime.CustomFormat = "HH:mm";
             dtpWalkTime.Format = DateTimePickerFormat.Time;
-            dtpWalkTime.Location = new Point(344, 99);
+            dtpWalkTime.Location = new Point(357, 99);
             dtpWalkTime.Name = "dtpWalkTime";
             dtpWalkTime.ShowUpDown = true;
             dtpWalkTime.Size = new Size(83, 27);
@@ -246,7 +246,7 @@
             dtpWalkDate.Format = DateTimePickerFormat.Custom;
             dtpWalkDate.Location = new Point(171, 99);
             dtpWalkDate.Name = "dtpWalkDate";
-            dtpWalkDate.Size = new Size(132, 27);
+            dtpWalkDate.Size = new Size(152, 27);
             dtpWalkDate.TabIndex = 7;
             // 
             // cmbAvailableDogs

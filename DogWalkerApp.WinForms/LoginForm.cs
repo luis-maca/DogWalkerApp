@@ -1,7 +1,7 @@
 ﻿using DogWalkerApp.Application.Interfaces;
 using DogWalkerApp.Infrastructure.Data;
-using System;
-using System.Windows.Forms;
+using DogWalkerApp.Infrastructure.Services;
+
 
 namespace DogWalkerApp.WinForms
 {
@@ -29,8 +29,8 @@ namespace DogWalkerApp.WinForms
             if (_loginService.ValidateCredentials(username, password))
             {
                 Hide();
-
-                var main = new MainMenuForm(_context);
+                var dogWalkService = new DogWalkService(_context);
+                var main = new MainMenuForm(_context, dogWalkService);
                 main.FormClosed += (_, _) => Close();
                 main.Show();
             }
